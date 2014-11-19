@@ -2,20 +2,20 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
 public class LoginCliente {
 
-	private Usuario nomeUsuario;
+	private Cliente cliente;
 	private int senhaLogin; // código de acesso único do usuário
 
-	public LoginCliente(Usuario nomeUsuario, int senhaLogin) {
-		this.nomeUsuario = nomeUsuario;
+	public LoginCliente(Cliente cliente, int senhaLogin) {
+		this.cliente = cliente;
 		this.senhaLogin = senhaLogin;
 	}
 
-	public Usuario getNomeUsuario() {
-		return nomeUsuario;
+	public Usuario getcliente() {
+		return cliente;
 	}
 
-	public void setNomeUsuario(Usuario nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+	public void setNomeUsuario(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public int getSenhaLogin() {

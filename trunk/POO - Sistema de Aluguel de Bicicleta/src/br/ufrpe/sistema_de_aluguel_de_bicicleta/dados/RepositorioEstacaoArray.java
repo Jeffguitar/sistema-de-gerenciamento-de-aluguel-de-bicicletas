@@ -1,6 +1,5 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
 
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 
 public class RepositorioEstacaoArray {
@@ -46,7 +45,7 @@ public class RepositorioEstacaoArray {
 		}
 	}
 
-	public int procurarIndiceBicicletaEstacao(long codigoEstacao,
+	private int procurarIndiceBicicletaEstacao(long codigoEstacao,
 			int codigoBicicleta) {
 		int indiceBicicleta = -1;
 
@@ -59,34 +58,30 @@ public class RepositorioEstacaoArray {
 		return indiceBicicleta;
 	}
 
-	private boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
+	/*
+	 * private boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
+	 * 
+	 * if
+	 * (this.estacao[this.procurarPeloIndice(codigoEstacao)].getBicicleta()[this
+	 * .procurarIndiceBicicletaEstacao(codigoEstacao, codigoBicicleta)]
+	 * .getAlugou() == false) { return false; } return true; }
+	 */
 
-		if (this.estacao[this.procurarPeloIndice(codigoEstacao)].getBicicleta()[this
-				.procurarIndiceBicicletaEstacao(codigoEstacao, codigoBicicleta)]
-				.getAlugou() == false) {
-			return false;
-		}
-		return true;
-	}
-
-	public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
-			Cliente cliente) {
-		boolean retorno = this.isAlugada(codigoEstacao, codigoBicicleta);;
-		int indiceEstacao = this.procurarPeloIndice(codigoEstacao);
-		int indiceBicicletaEstacao = this.procurarIndiceBicicletaEstacao(
-				codigoEstacao, codigoBicicleta);
-		
-		if (retorno == false && indiceEstacao != -1
-				&& indiceBicicletaEstacao != -1) {
-			this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-					.setCliente(cliente); // Insere um cliente em uma
-											// determinada bicicleta
-			this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-					.setAlugou(true); // Informa que a bicicleta encontra-se
-										// alugada
-			// Falta implementar o armazenamento da hora
-		}
-	}
+	/*
+	 * public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
+	 * Cliente cliente) { boolean retorno = this.isAlugada(codigoEstacao,
+	 * codigoBicicleta); ; int indiceEstacao =
+	 * this.procurarPeloIndice(codigoEstacao); int indiceBicicletaEstacao =
+	 * this.procurarIndiceBicicletaEstacao( codigoEstacao, codigoBicicleta);
+	 * 
+	 * if (retorno == false && indiceEstacao != -1 && indiceBicicletaEstacao !=
+	 * -1) { this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
+	 * .setCliente(cliente); // Insere um cliente em uma // determinada
+	 * bicicleta
+	 * this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
+	 * .setAlugou(true); // Informa que a bicicleta encontra-se // alugada //
+	 * Falta implementar o armazenamento da hora } }
+	 */
 
 	private void cadastrarBicicletaEstacao() {
 
