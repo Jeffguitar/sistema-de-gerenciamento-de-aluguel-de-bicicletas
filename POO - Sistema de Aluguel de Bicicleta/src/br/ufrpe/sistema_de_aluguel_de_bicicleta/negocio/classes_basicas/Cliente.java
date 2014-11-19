@@ -1,19 +1,54 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
 public class Cliente extends Usuario {
-	private int horaInicio;
-	private int minutoInicio;
-	private int horaFim;
-	private int minutoFim;
+	private int identidade;
+	private String endereco;
+	private int horaInicio; // hora do aluguel
+	private int minutoInicio; // minuto do aluguel
+	private int horaFim; // hora da devolucao
+	private int minutoFim; // minuto da devolucao
 
 	public Cliente(String nome, String cpf, int identidade, String endereco,
-			int idade, int horaInicio, int minutoInicio, int horaFim,
-			int minutoFim) {
-		super(endereco, endereco, minutoInicio, endereco, minutoInicio);
-		this.setHoraInicio(horaInicio);
-		this.setMinutoInicio(minutoInicio);
-		this.setHoraInicio(horaInicio);
-		this.setHoraFim(horaFim);
+			int horaInicio, int minutoInicio, int horaFim, int minutoFim) {
+		super(nome, cpf);
+		this.identidade = identidade;
+		this.endereco = endereco;
+		this.horaInicio = 0;
+		this.minutoInicio = 0;
+		this.horaFim = 0;
+		this.minutoFim = 0;
+	}
+
+	public int getIdentidade() {
+		return identidade;
+	}
+
+	public void setIdentidade(int identidade) {
+		this.identidade = identidade;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public int getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(int horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public int getMinutoInicio() {
+		return minutoInicio;
+	}
+
+	public void setMinutoInicio(int minutoInicio) {
+		this.minutoInicio = minutoInicio;
 	}
 
 	public int getHoraFim() {
@@ -32,19 +67,28 @@ public class Cliente extends Usuario {
 		this.minutoFim = minutoFim;
 	}
 
-	public int getMinutoInicio() {
-		return minutoInicio;
+	@Override
+	public String getNome() {
+		// TODO Auto-generated method stub
+		return this.nome;
 	}
 
-	public void setMinutoInicio(int minutoInicio) {
-		this.minutoInicio = minutoInicio;
+	@Override
+	public void setNome(String nome) {
+		this.nome = nome;
+
 	}
 
-	public int getHoraInicio() {
-		return horaInicio;
+	@Override
+	public String getCpf() {
+		// TODO Auto-generated method stub
+		return this.cpf;
 	}
 
-	public void setHoraInicio(int horaInicio) {
-		this.horaInicio = horaInicio;
+	@Override
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+
 	}
+
 }

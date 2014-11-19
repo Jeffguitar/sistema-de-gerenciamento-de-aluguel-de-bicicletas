@@ -16,4 +16,5 @@ public class Estacao {
 	public Bicicleta[] getBicicleta() {
 		return bicicleta;
 	}
+
 }
