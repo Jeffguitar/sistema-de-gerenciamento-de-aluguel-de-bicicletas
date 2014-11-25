@@ -13,8 +13,16 @@ public class Estacao {
 		return codigo;
 	}
 
+	public void setCodigo(long codigo) {
+		this.codigo = codigo;
+	}
+
 	public Bicicleta[] getBicicleta() {
 		return bicicleta;
+	}
+
+	public void setBicicleta(Bicicleta[] bicicleta) {
+		this.bicicleta = bicicleta;
 	}
 
 }
