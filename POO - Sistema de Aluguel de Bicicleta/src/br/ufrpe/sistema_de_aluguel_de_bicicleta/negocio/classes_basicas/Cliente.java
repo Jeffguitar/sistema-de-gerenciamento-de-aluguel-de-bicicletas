@@ -1,22 +1,27 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
+import java.util.Calendar;
+
 public class Cliente extends Usuario {
 	private int identidade;
 	private String endereco;
-	private int horaInicio; // hora do aluguel
-	private int minutoInicio; // minuto do aluguel
-	private int horaFim; // hora da devolucao
-	private int minutoFim; // minuto da devolucao
+	private Calendar data;
 
-	public Cliente(String nome, String cpf, int identidade, String endereco,
-			int horaInicio, int minutoInicio, int horaFim, int minutoFim) {
+	public Cliente(String nome, String cpf, int identidade, String endereco) {
 		super(nome, cpf);
 		this.identidade = identidade;
 		this.endereco = endereco;
-		this.horaInicio = 0;
-		this.minutoInicio = 0;
-		this.horaFim = 0;
-		this.minutoFim = 0;
+		this.data = null; // quando instanciar um cliente, necessariamente, ele
+							// não terá data de aluguel.
+	}
+
+	public Cliente(String nome, String cpf, int identidade, String endereco,
+			Calendar data) {
+		super(nome, cpf);
+		this.identidade = identidade;
+		this.endereco = endereco;
+		this.data = data; // quando instanciar um cliente, informar uma data de
+							// aluguel.
 	}
 
 	public int getIdentidade() {
@@ -35,42 +40,17 @@ public class Cliente extends Usuario {
 		this.endereco = endereco;
 	}
 
-	public int getHoraInicio() {
-		return horaInicio;
+	public Calendar getData() {
+		return data;
 	}
 
-	public void setHoraInicio(int horaInicio) {
-		this.horaInicio = horaInicio;
-	}
-
-	public int getMinutoInicio() {
-		return minutoInicio;
-	}
-
-	public void setMinutoInicio(int minutoInicio) {
-		this.minutoInicio = minutoInicio;
-	}
-
-	public int getHoraFim() {
-		return horaFim;
-	}
-
-	public void setHoraFim(int horaFim) {
-		this.horaFim = horaFim;
-	}
-
-	public int getMinutoFim() {
-		return minutoFim;
-	}
-
-	public void setMinutoFim(int minutoFim) {
-		this.minutoFim = minutoFim;
+	public void setData(Calendar data) {
+		this.data = data;
 	}
 
 	@Override
 	public String getNome() {
-		// TODO Auto-generated method stub
-		return this.nome;
+		return nome;
 	}
 
 	@Override
@@ -81,14 +61,12 @@ public class Cliente extends Usuario {
 
 	@Override
 	public String getCpf() {
-		// TODO Auto-generated method stub
-		return this.cpf;
+		return cpf;
 	}
 
 	@Override
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
-
 	}
 
 }
