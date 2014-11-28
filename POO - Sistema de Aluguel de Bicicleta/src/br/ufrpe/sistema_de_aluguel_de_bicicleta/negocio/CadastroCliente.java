@@ -1,17 +1,17 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioUsuarioArray;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioClienteArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 
-public class CadastroUsuario {
+public class CadastroCliente {
 
-	private RepositorioUsuarioArray repositorio;
+	private RepositorioClienteArray repositorio;
 
-	public CadastroUsuario() {
-		this.repositorio = new RepositorioUsuarioArray(100);
+	public CadastroCliente() {
+		this.repositorio = RepositorioClienteArray.getInstance();
 	}
 
-	public RepositorioUsuarioArray getRepositorio() {
+	public RepositorioClienteArray getRepositorio() {
 		return repositorio;
 	}
 

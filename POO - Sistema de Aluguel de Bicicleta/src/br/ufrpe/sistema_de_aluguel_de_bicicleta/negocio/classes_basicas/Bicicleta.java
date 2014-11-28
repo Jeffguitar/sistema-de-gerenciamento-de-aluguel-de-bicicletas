@@ -4,10 +4,13 @@ public class Bicicleta {
 	private long codigo;
 	private boolean alugou;
 
-	public Bicicleta(long codigo, boolean alugou, Cliente cliente) {
-		super();
+	public Bicicleta(long codigo, boolean alugou) {
 		this.codigo = codigo;
 		this.alugou = false;
+	}
+
+	public Bicicleta() {
+
 	}
 
 	public long getCodigo() {

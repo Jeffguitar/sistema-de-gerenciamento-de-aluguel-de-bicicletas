@@ -7,7 +7,7 @@ public class CadastroEstacao {
 	private RepositorioEstacaoArray repositorio;
 
 	public CadastroEstacao() {
-		this.repositorio = new RepositorioEstacaoArray(100);
+		this.repositorio = RepositorioEstacaoArray.getInstance();
 	}
 
 	public RepositorioEstacaoArray getrepositorio() {

@@ -6,11 +6,20 @@ public class RepositorioEstacaoArray {
 
 	private Estacao estacao[];
 	private int proxima;
+	private static RepositorioEstacaoArray repositorio;
 
-	public RepositorioEstacaoArray(int tamanho) {
+	private RepositorioEstacaoArray(int tamanho) {
 		this.estacao = new Estacao[tamanho];
 		this.proxima = 0;
 	}
+	
+	public static RepositorioEstacaoArray  getInstance(){
+		if(repositorio == null){
+			repositorio = new RepositorioEstacaoArray(100);
+		}
+		return repositorio;
+	}
+
 
 	private int procurarPeloIndice(long codigo) {
 		int indice = -1;
@@ -83,27 +92,28 @@ public class RepositorioEstacaoArray {
 	 * Falta implementar o armazenamento da hora } }
 	 */
 
-	private void cadastrarBicicletaEstacao() {
+	private void cadastrarBicicletaEstacao() { // Posso implementar na fachada,
+												// antes de montar o obj
+												// 'estacao'
 
-		for (int j = 0; j < this.estacao.length; j++) {
-			for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
-				this.estacao[j].getBicicleta()[i].setCodigo(i + 1);
-				this.estacao[j].getBicicleta()[i].setAlugou(false);
-			}
+		for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
+			this.estacao[this.proxima].getBicicleta()[i].setCodigo(i + 1);
+			this.estacao[this.proxima].getBicicleta()[i].setAlugou(false);
 		}
 	}
 
 	public void cadastrarEstação(Estacao estacao) {
 
 		if ((this.procurarEstacao(estacao.getCodigo()) == null)
-				&& this.procurarPeloIndice(estacao.getCodigo()) < this.proxima) {
+				&& this.procurarPeloIndice(estacao.getCodigo()) == -1) {
 			this.estacao[this.proxima] = estacao;
-			this.proxima += 1;
+
 		}
 		if (this.proxima == this.estacao.length) {
 			this.duplicaArrayEstacao();
 		}
 		this.cadastrarBicicletaEstacao();
+		this.proxima += 1;
 	}
 
 	public void excluirEstacao(long codigo) {

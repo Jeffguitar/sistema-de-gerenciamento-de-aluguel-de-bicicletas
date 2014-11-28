@@ -2,11 +2,25 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
 public class Estacao {
 	private long codigo;
+	private String descricao;
 	private Bicicleta bicicleta[];
 
-	public Estacao(long codigo, int tamanho) {
+	public Estacao(long codigo, String descricao, Bicicleta[] bicicleta) {
+		this(descricao, bicicleta);
 		this.codigo = codigo;
-		this.bicicleta = new Bicicleta[tamanho];
+	}
+
+	public Estacao(String descricao, Bicicleta[] bicicleta) {
+		this(descricao);
+		this.descricao = descricao;
+
+	}
+
+	public Estacao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Estacao() {
 	}
 
 	public long getCodigo() {
@@ -15,6 +29,14 @@ public class Estacao {
 
 	public void setCodigo(long codigo) {
 		this.codigo = codigo;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Bicicleta[] getBicicleta() {
