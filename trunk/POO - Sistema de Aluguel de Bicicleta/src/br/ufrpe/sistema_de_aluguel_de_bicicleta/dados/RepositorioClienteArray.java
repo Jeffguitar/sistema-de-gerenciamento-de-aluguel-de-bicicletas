@@ -2,13 +2,21 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 
-public class RepositorioUsuarioArray {
+public class RepositorioClienteArray {
 	private Cliente usuario[];
 	private int proximo;
+	private static RepositorioClienteArray repositorio;
 
-	public RepositorioUsuarioArray(int tamanho) {
+	private RepositorioClienteArray(int tamanho) {
 		this.usuario = new Cliente[tamanho];
 		this.proximo = 0;
+	}
+	
+	public static RepositorioClienteArray  getInstance(){
+		if(repositorio == null){
+			repositorio = new RepositorioClienteArray(100);
+		}
+		return repositorio;
 	}
 
 	private void duplicaArrayUsuario() {
