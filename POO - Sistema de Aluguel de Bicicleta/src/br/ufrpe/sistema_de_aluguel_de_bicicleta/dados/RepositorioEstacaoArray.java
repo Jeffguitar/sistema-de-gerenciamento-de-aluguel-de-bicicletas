@@ -12,14 +12,13 @@ public class RepositorioEstacaoArray {
 		this.estacao = new Estacao[tamanho];
 		this.proxima = 0;
 	}
-	
-	public static RepositorioEstacaoArray  getInstance(){
-		if(repositorio == null){
+
+	public static RepositorioEstacaoArray getInstance() {
+		if (repositorio == null) {
 			repositorio = new RepositorioEstacaoArray(100);
 		}
 		return repositorio;
 	}
-
 
 	private int procurarPeloIndice(long codigo) {
 		int indice = -1;
@@ -105,7 +104,7 @@ public class RepositorioEstacaoArray {
 	public void cadastrarEstação(Estacao estacao) {
 
 		if ((this.procurarEstacao(estacao.getCodigo()) == null)
-				&& this.procurarPeloIndice(estacao.getCodigo()) == -1) {
+				&& this.procurarPeloIndice(estacao.getCodigo()) != this.proxima) {
 			this.estacao[this.proxima] = estacao;
 
 		}
@@ -118,8 +117,7 @@ public class RepositorioEstacaoArray {
 
 	public void excluirEstacao(long codigo) {
 
-		if (this.procurarPeloIndice(codigo) != -1
-				&& this.procurarPeloIndice(codigo) != this.proxima) {
+		if (this.procurarPeloIndice(codigo) != this.proxima) {
 			this.estacao[this.procurarPeloIndice(codigo)] = this.estacao[this.proxima - 1];
 			this.estacao[this.proxima - 1] = null;
 			this.proxima = this.proxima - 1;

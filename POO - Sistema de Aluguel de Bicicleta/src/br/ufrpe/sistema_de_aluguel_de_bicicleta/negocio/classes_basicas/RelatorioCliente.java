@@ -1,37 +1,28 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
-import java.util.Date;
 
 public class RelatorioCliente {
 	private long id;
-	private Cliente cliente;
-	private Estacao estacao;
-	private Date data;
+	private Aluguel aluguel;
 	private double preco;
 
-	public RelatorioCliente(long id, Cliente cliente, Estacao estacao,
-			Date data, double preco) {
+	public RelatorioCliente(long id, Aluguel aluguel, double preco) {
 		this.id = id;
-		this.cliente = cliente;
-		this.estacao = estacao;
-		this.data = data;
+		this.aluguel = aluguel;
 		this.preco = preco;
 	}
 
-	public RelatorioCliente(Cliente cliente, Estacao estacao, Date data,
-			double preco) {
-		this.cliente = cliente;
-		this.estacao = estacao;
-		this.data = data;
+	public RelatorioCliente(Aluguel aluguel, double preco) {
+		this.aluguel = aluguel;
 		this.preco = preco;
 	}
 
-	public RelatorioCliente(Date data) {
-		this.data = data;
+	public RelatorioCliente(Aluguel aluguel) {
+		this.aluguel = aluguel;
 	}
 
 	public RelatorioCliente() {
-		super();
+
 	}
 
 	public long getId() {
@@ -42,28 +33,12 @@ public class RelatorioCliente {
 		this.id = id;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Aluguel getAluguel() {
+		return aluguel;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Estacao getEstacao() {
-		return estacao;
-	}
-
-	public void setEstacao(Estacao estacao) {
-		this.estacao = estacao;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
+	public void setAluguel(Aluguel aluguel) {
+		this.aluguel = aluguel;
 	}
 
 	public double getPreco() {
