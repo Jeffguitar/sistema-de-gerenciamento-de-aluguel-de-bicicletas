@@ -58,22 +58,26 @@ public class RepositorioEstacaoArray {
 		int indiceBicicleta = -1;
 
 		for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
-			if (this.estacao[this.procurarPeloIndice(codigoEstacao)]
-					.getBicicleta()[i].getCodigo() == codigoBicicleta) {
+			if (this.procurarEstacao(codigoEstacao).getBicicleta()[i]
+					.getCodigo() == codigoBicicleta) {
 				indiceBicicleta = i;
 			}
 		}
 		return indiceBicicleta;
 	}
 
-	/*
-	 * private boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
-	 * 
-	 * if
-	 * (this.estacao[this.procurarPeloIndice(codigoEstacao)].getBicicleta()[this
-	 * .procurarIndiceBicicletaEstacao(codigoEstacao, codigoBicicleta)]
-	 * .getAlugou() == false) { return false; } return true; }
-	 */
+	public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
+		Estacao estacaoEncontrada = this.procurarEstacao(codigoEstacao);
+		int indiceBicicleta = this.procurarIndiceBicicletaEstacao(
+				codigoEstacao, codigoBicicleta);
+
+		if (indiceBicicleta > 0 && indiceBicicleta < this.estacao[this.proxima].getBicicleta().length ) {
+			if (estacaoEncontrada.getBicicleta()[indiceBicicleta].getAlugou() == false) {
+				return false; // retornará false se a bicicletar estiver disponivel.
+			}
+		}
+		return true; // retornará true se a bicicletar estiver indisponivel.
+	}
 
 	/*
 	 * public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,

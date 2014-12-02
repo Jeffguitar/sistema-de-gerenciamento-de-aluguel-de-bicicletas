@@ -11,9 +11,9 @@ public class RepositorioClienteArray {
 		this.usuario = new Cliente[tamanho];
 		this.proximo = 0;
 	}
-	
-	public static RepositorioClienteArray  getInstance(){
-		if(repositorio == null){
+
+	public static RepositorioClienteArray getInstance() {
+		if (repositorio == null) {
 			repositorio = new RepositorioClienteArray(100);
 		}
 		return repositorio;

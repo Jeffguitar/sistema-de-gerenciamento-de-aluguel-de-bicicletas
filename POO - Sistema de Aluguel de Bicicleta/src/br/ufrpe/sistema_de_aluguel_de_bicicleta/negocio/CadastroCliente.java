@@ -11,10 +11,6 @@ public class CadastroCliente {
 		this.repositorio = RepositorioClienteArray.getInstance();
 	}
 
-	public RepositorioClienteArray getRepositorio() {
-		return repositorio;
-	}
-
 	public void cadastrar(Cliente usuario) {
 		if (this.procurar(usuario.getCpf()) == null) {
 			this.repositorio.cadastrarUsuario(usuario);
