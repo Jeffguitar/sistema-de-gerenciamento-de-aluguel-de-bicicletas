@@ -5,19 +5,21 @@ public class Estacao {
 	private String descricao;
 	private Bicicleta bicicleta[];
 
-	public Estacao(long codigo, String descricao, Bicicleta[] bicicleta) {
-		this(descricao, bicicleta);
+	public Estacao(long codigo, String descricao) {
+		this(descricao);
 		this.codigo = codigo;
+		this.bicicleta = new Bicicleta[20];
 	}
 
 	public Estacao(String descricao, Bicicleta[] bicicleta) {
 		this(descricao);
-		this.descricao = descricao;
+		this.bicicleta = new Bicicleta[20];
 
 	}
 
 	public Estacao(String descricao) {
 		this.descricao = descricao;
+		this.bicicleta = new Bicicleta[20];
 	}
 
 	public Estacao() {

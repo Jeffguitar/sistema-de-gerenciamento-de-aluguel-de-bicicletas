@@ -75,6 +75,33 @@ public class RepositorioAluguelArray {
 		}
 	}
 
+	public Aluguel[] exibeAluguel() {
+		return this.aluguel;
+	}
+
+	public Aluguel[] exibeAluguelPorEstacao(long codigo) {
+		int contador = 1;
+		int k = 0;
+		Aluguel retornoBusca[] = null;
+
+		for (int i = 0; i < this.aluguel.length; i++) {
+			if (this.aluguel[i].getEstacao().getCodigo() == codigo) {
+				contador++;
+			}
+		}
+		if (contador != 1) {
+			retornoBusca = new Aluguel[contador];
+			for (int i = 0; i < this.aluguel.length; i++) {
+				if (this.aluguel[i].getEstacao().getCodigo() == codigo) {
+					retornoBusca[k] = this.aluguel[i];
+					k++;
+				}
+			}
+		}
+
+		return retornoBusca; // retorna NULL se não encontrar o aluguel
+	}
+
 	public void excluirEstacao(String cpf) {
 
 		if (this.procurarIndicePeloCpf(cpf) != this.proxima) {
