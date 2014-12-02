@@ -10,10 +10,6 @@ public class CadastroEstacao {
 		this.repositorio = RepositorioEstacaoArray.getInstance();
 	}
 
-	public RepositorioEstacaoArray getrepositorio() {
-		return repositorio;
-	}
-
 	public void cadastrar(Estacao estacao) {
 		if (estacao != null
 				&& this.procurarEstacao(estacao.getCodigo()) == null) {
@@ -40,5 +36,9 @@ public class CadastroEstacao {
 		if (codigo != 0) {
 			this.repositorio.excluirEstacao(codigo);
 		}
+	}
+
+	public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
+		return this.repositorio.isAlugada(codigoEstacao, codigoBicicleta);
 	}
 }

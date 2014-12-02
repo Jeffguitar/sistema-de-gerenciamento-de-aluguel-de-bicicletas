@@ -1,6 +1,7 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 
 public class RepositorioAluguelArray {
 	private Aluguel aluguel[];
@@ -102,7 +103,7 @@ public class RepositorioAluguelArray {
 		return retornoBusca; // retorna NULL se não encontrar o aluguel
 	}
 
-	public void excluirEstacao(String cpf) {
+	public void excluirAluguel(String cpf) {
 
 		if (this.procurarIndicePeloCpf(cpf) != this.proxima) {
 			this.aluguel[this.procurarIndicePeloCpf(cpf)] = this.aluguel[this.proxima - 1];
@@ -110,4 +111,19 @@ public class RepositorioAluguelArray {
 			this.proxima = this.proxima - 1;
 		}
 	}
+	
+//	public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
+//		Estacao estacaoEncontrada = this.procurarEstacao(codigoEstacao);
+//		int indiceBicicleta = this.procurarIndiceBicicletaEstacao(
+//				codigoEstacao, codigoBicicleta);
+//
+//		if (indiceBicicleta > 0 && indiceBicicleta < this.estacao[this.proxima].getBicicleta().length ) {
+//			if (estacaoEncontrada.getBicicleta()[indiceBicicleta].getAlugou() == false) {
+//				return false; // retornará false se a bicicletar estiver disponivel.
+//			}
+//		}
+//		return true; // retornará true se a bicicletar estiver indisponivel.
+//	}
+
+	
 }
