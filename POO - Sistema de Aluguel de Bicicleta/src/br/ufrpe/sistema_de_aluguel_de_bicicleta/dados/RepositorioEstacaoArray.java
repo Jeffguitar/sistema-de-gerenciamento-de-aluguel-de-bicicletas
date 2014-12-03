@@ -78,6 +78,14 @@ public class RepositorioEstacaoArray {
 		}
 		return true; // retornará true se a bicicletar estiver indisponivel.
 	}
+	public boolean infoBicicleta(long codigoEstacao, int codigoBicicleta){
+		if(this.isAlugada(codigoEstacao, codigoBicicleta)){
+			
+		}
+		else{
+			return
+		}
+	}
 
 	/*
 	 * public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,

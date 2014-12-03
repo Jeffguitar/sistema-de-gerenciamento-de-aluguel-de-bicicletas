@@ -1,5 +1,5 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
-public class CadastroLogin {
-	
+public interface IFachada {
+
 }
