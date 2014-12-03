@@ -3,11 +3,11 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioClienteArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 
-public class CadastroCliente {
+public class ControladorCliente {
 
 	private RepositorioClienteArray repositorio;
 
-	public CadastroCliente() {
+	public ControladorCliente() {
 		this.repositorio = RepositorioClienteArray.getInstance();
 	}
 

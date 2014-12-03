@@ -3,10 +3,10 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioEstacaoArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 
-public class CadastroEstacao {
+public class ControladorEstacao {
 	private RepositorioEstacaoArray repositorio;
 
-	public CadastroEstacao() {
+	public ControladorEstacao() {
 		this.repositorio = RepositorioEstacaoArray.getInstance();
 	}
 
