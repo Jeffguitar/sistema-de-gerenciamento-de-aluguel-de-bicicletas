@@ -9,6 +9,10 @@ abstract class Usuario {
 		this.cpf = cpf;
 	}
 
+	public Usuario() {
+
+	}
+
 	public abstract String getNome();
 
 	public abstract void setNome(String nome);

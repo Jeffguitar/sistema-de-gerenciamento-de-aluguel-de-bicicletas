@@ -1,40 +1,32 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Aluguel {
 	private long id;
 	private Estacao estacao;
 	private Cliente cliente;
-	private Date data;
+	private Calendar dataAluguel;
+	private Calendar dataDevolucao;
+	private double valor;
 
-	public Aluguel(long id, Estacao estacao, Cliente cliente, Date data) {
+	public Aluguel(long id, Estacao estacao, Cliente cliente,
+			Calendar dataAluguel, Calendar dataDevolucao, double valor) {
 		this.id = id;
 		this.estacao = estacao;
 		this.cliente = cliente;
-		this.data = data;
+		this.dataAluguel = dataAluguel;
+		this.dataDevolucao = dataDevolucao;
+		this.valor = valor;
 	}
 
-	public Aluguel(Estacao estacao, Cliente cliente, Date data) {
+	public Aluguel(Estacao estacao, Cliente cliente, Calendar dataAluguel,
+			Calendar dataDevolucao, double valor) {
 		this.estacao = estacao;
 		this.cliente = cliente;
-		this.data = data;
-	}
-
-	public Aluguel(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Aluguel(Estacao estacao) {
-		this.estacao = estacao;
-	}
-
-	public Aluguel(Date data) {
-		this.data = data;
-	}
-
-	public Aluguel() {
-
+		this.dataAluguel = dataAluguel;
+		this.dataDevolucao = dataDevolucao;
+		this.valor = valor;
 	}
 
 	public long getId() {
@@ -61,12 +53,28 @@ public class Aluguel {
 		this.cliente = cliente;
 	}
 
-	public Date getData() {
-		return data;
+	public Calendar getDataAluguel() {
+		return dataAluguel;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataAluguel(Calendar dataAluguel) {
+		this.dataAluguel = dataAluguel;
+	}
+
+	public Calendar getDataDevolucao() {
+		return dataDevolucao;
+	}
+
+	public void setDataDevolucao(Calendar dataDevolucao) {
+		this.dataDevolucao = dataDevolucao;
+	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
 
 }
