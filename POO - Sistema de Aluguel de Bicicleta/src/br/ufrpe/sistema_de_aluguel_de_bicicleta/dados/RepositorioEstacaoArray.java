@@ -1,130 +1,69 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 
 public class RepositorioEstacaoArray {
 
-	private Estacao estacao[];
-	private int proxima;
+	private List<Estacao> listaEstacao;
 	private static RepositorioEstacaoArray repositorio;
 
-	private RepositorioEstacaoArray(int tamanho) {
-		this.estacao = new Estacao[tamanho];
-		this.proxima = 0;
+	private RepositorioEstacaoArray() {
+		this.listaEstacao = new ArrayList<Estacao>();
 	}
 
 	public static RepositorioEstacaoArray getInstance() {
 		if (repositorio == null) {
-			repositorio = new RepositorioEstacaoArray(100);
+			repositorio = new RepositorioEstacaoArray();
 		}
 		return repositorio;
 	}
 
-	private int procurarPeloIndice(long codigo) {
+	public void cadastrarEstacao(Estacao estacao) {
+		this.listaEstacao.add(estacao);
+	}
+
+	public Estacao procurarEstacao(long id) {
+		int indice = this.obterIndice(id);
+		return this.listaEstacao.get(indice);
+	}
+
+	public void alterarEstacao(Estacao estacao) {
+		int indice = this.obterIndice(estacao.getCodigo());
+		this.listaEstacao.set(indice, estacao);
+	}
+
+	public boolean existe(long id) {
+		boolean existe = false;
+		int indice = this.obterIndice(id);
+
+		if (indice != -1)
+			return existe = true;
+		return existe;
+	}
+
+	public boolean excluirEstacao(long id) {
+		int indice = this.obterIndice(id);
+		// preicsa usar um try, catch, informando que a estação não existe
+		if (indice != -1) {
+			this.listaEstacao.remove(indice);
+			return true;
+		}
+		return false;
+	}
+
+	private int obterIndice(long id) {
 		int indice = -1;
 
-		for (int i = 0; i < this.estacao.length; i++) {
-			if (this.estacao[i].getCodigo() == (codigo)) {
+		for (int i = 0; i < this.listaEstacao.size(); i++) {
+			if (this.listaEstacao.get(i).getCodigo() == id) {
 				indice = i;
 			}
+			// tratar um exceção do tipo se o obj não foi encontrada
 		}
 		return indice; // Retorna -1 se não encontrou
 	}
 
-	public Estacao procurarEstacao(long codigo) {
-		Estacao retornoBusca = null;
-
-		for (int i = 0; i < this.estacao.length; i++) {
-			if (this.estacao[i].getCodigo() == (codigo)) {
-				retornoBusca = this.estacao[i];
-			}
-		}
-		return retornoBusca; // retorna NULL se não encontrar a estação
-	}
-
-	private void duplicaArrayEstacao() {
-
-		if (this.estacao != null && this.estacao.length > 0) {
-			Estacao arrayEstacaoDobrado[] = new Estacao[this.estacao.length * 2];
-			for (int i = 0; i < this.estacao.length; i++) {
-				arrayEstacaoDobrado[i] = this.estacao[i];
-			}
-			this.estacao = arrayEstacaoDobrado;
-		}
-	}
-
-	private int procurarIndiceBicicletaEstacao(long codigoEstacao,
-			int codigoBicicleta) {
-		int indiceBicicleta = -1;
-
-		for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
-			if (this.procurarEstacao(codigoEstacao).getBicicleta()[i]
-					.getCodigo() == codigoBicicleta) {
-				indiceBicicleta = i;
-			}
-		}
-		return indiceBicicleta;
-	}
-
-	public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
-		Estacao estacaoEncontrada = this.procurarEstacao(codigoEstacao);
-		int indiceBicicleta = this.procurarIndiceBicicletaEstacao(
-				codigoEstacao, codigoBicicleta);
-
-		if (indiceBicicleta > 0 && indiceBicicleta < this.estacao[this.proxima].getBicicleta().length ) {
-			if (estacaoEncontrada.getBicicleta()[indiceBicicleta].getAlugou() == false) {
-				return false; // retornará false se a bicicletar estiver disponivel.
-			}
-		}
-		return true; // retornará true se a bicicletar estiver indisponivel.
-	}
-
-	/*
-	 * public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
-	 * Cliente cliente) { boolean retorno = this.isAlugada(codigoEstacao,
-	 * codigoBicicleta); ; int indiceEstacao =
-	 * this.procurarPeloIndice(codigoEstacao); int indiceBicicletaEstacao =
-	 * this.procurarIndiceBicicletaEstacao( codigoEstacao, codigoBicicleta);
-	 * 
-	 * if (retorno == false && indiceEstacao != -1 && indiceBicicletaEstacao !=
-	 * -1) { this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	 * .setCliente(cliente); // Insere um cliente em uma // determinada
-	 * bicicleta
-	 * this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	 * .setAlugou(true); // Informa que a bicicleta encontra-se // alugada //
-	 * Falta implementar o armazenamento da hora } }
-	 */
-
-	private void cadastrarBicicletaEstacao() { // Posso implementar na fachada,
-												// antes de montar o obj
-												// 'estacao'
-
-		for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
-			this.estacao[this.proxima].getBicicleta()[i].setCodigo(i + 1);
-			this.estacao[this.proxima].getBicicleta()[i].setAlugou(false);
-		}
-	}
-
-	public void cadastrarEstação(Estacao estacao) {
-
-		if ((this.procurarEstacao(estacao.getCodigo()) == null)
-				&& this.procurarPeloIndice(estacao.getCodigo()) != this.proxima) {
-			this.estacao[this.proxima] = estacao;
-
-		}
-		if (this.proxima == this.estacao.length) {
-			this.duplicaArrayEstacao();
-		}
-		this.cadastrarBicicletaEstacao();
-		this.proxima += 1;
-	}
-
-	public void excluirEstacao(long codigo) {
-
-		if (this.procurarPeloIndice(codigo) != this.proxima) {
-			this.estacao[this.procurarPeloIndice(codigo)] = this.estacao[this.proxima - 1];
-			this.estacao[this.proxima - 1] = null;
-			this.proxima = this.proxima - 1;
-		}
-	}
 }
