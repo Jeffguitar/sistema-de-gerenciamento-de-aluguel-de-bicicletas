@@ -1,8 +1,13 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Aluguel {
+public class Aluguel implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private Estacao estacao;
 	private Cliente cliente;

@@ -6,11 +6,11 @@ import java.util.List;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 
 public class RepositorioAdministradorArray {
-	private List<Administrador> listaLogin;
+	private List<Administrador> listaAdm;
 	private static RepositorioAdministradorArray repositorio;
 
 	private RepositorioAdministradorArray() {
-		this.listaLogin = new ArrayList<Administrador>();
+		this.listaAdm = new ArrayList<Administrador>();
 	}
 
 	public static RepositorioAdministradorArray getInstance() {
@@ -21,18 +21,18 @@ public class RepositorioAdministradorArray {
 	}
 
 	public void cadastrarAdministrador(Administrador adm) {
-		this.listaLogin.add(adm);
+		this.listaAdm.add(adm);
 	}
 
 	public Administrador procurarAdministrador(String cpf) {
 		int indice = this.obterIndice(cpf);
-		return this.listaLogin.get(indice);
+		return this.listaAdm.get(indice);
 	}
 
 	public void alterarAdministrador(Administrador adm) {
 		int indice = this.obterIndice(adm.getCpf());
 		// precisa do índice pra setar na posição correta
-		this.listaLogin.set(indice, adm);
+		this.listaAdm.set(indice, adm);
 	}
 
 	public boolean existe(String cpf) {
@@ -48,7 +48,7 @@ public class RepositorioAdministradorArray {
 		int indice = this.obterIndice(cpf);
 		// preicsa usar um try, catch, informando que o adm não existe
 		if (indice != -1) {
-			this.listaLogin.remove(indice);
+			this.listaAdm.remove(indice);
 			return true;
 		}
 		return false;
@@ -57,8 +57,8 @@ public class RepositorioAdministradorArray {
 	private int obterIndice(String cpf) {
 		int indice = -1;
 
-		for (int i = 0; i < this.listaLogin.size(); i++) {
-			if (this.listaLogin.get(i).getCpf().equals(cpf)) {
+		for (int i = 0; i < this.listaAdm.size(); i++) {
+			if (this.listaAdm.get(i).getCpf().equals(cpf)) {
 				indice = i;
 			}
 			// tratar um exceção do tipo se a conta não foi encontrada
