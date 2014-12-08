@@ -1,6 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
-public class Estacao {
+import java.io.Serializable;
+
+public class Estacao implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long codigo;
 	private String descricao;
 	private Bicicleta bicicleta[];

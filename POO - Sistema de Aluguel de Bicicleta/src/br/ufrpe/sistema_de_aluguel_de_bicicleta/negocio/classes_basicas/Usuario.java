@@ -1,6 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
-abstract class Usuario {
+import java.io.Serializable;
+
+abstract class Usuario implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String nome;
 	protected String cpf;
 

@@ -1,6 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
-public class Administrador extends Usuario {
+import java.io.Serializable;
+
+public class Administrador extends Usuario implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String login;
 
