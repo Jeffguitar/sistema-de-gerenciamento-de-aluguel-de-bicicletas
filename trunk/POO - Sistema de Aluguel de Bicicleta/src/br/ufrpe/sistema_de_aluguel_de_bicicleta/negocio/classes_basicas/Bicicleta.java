@@ -12,7 +12,16 @@ public class Bicicleta implements Serializable {
 
 	public Bicicleta(long codigo, boolean alugou) {
 		this.codigo = codigo;
+		this.alugou = alugou;
+	}
+
+	public Bicicleta(long codigo) {
+		this.codigo = codigo;
 		this.alugou = false;
+	}
+
+	public Bicicleta(boolean alugou) {
+		this.alugou = alugou;
 	}
 
 	public Bicicleta() {

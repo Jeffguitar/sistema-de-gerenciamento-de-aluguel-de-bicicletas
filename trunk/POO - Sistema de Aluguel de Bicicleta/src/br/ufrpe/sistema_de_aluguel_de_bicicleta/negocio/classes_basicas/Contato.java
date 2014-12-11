@@ -11,8 +11,21 @@ public class Contato implements Serializable {
 	private String telefone;
 	private String celular;
 
-	public Contato() {
+	public Contato(String email, String telefone, String celular) {
+		this.email = email;
+		this.telefone = telefone;
+		this.celular = celular;
+	}
 
+	public Contato(String email, String telefone) {
+		super();
+		this.email = email;
+		this.telefone = telefone;
+	}
+
+	public Contato(String telefone) {
+		super();
+		this.telefone = telefone;
 	}
 
 	public String getEmail() {

@@ -18,8 +18,8 @@ public class ControladorCliente {
 			repositorio.cadastrarCliente(cliente);
 	}
 
-	public void procurar(String cpf) {
-		this.repositorio.procurarCliente(cpf);
+	public Cliente procurar(String cpf) {
+		return this.repositorio.procurarCliente(cpf);
 	}
 
 	public void alterar(Cliente cliente) {

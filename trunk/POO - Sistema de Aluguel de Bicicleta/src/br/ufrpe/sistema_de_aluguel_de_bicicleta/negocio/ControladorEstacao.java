@@ -17,8 +17,8 @@ public class ControladorEstacao {
 			repositorio.cadastrarEstacao(estacao);
 	}
 
-	public void procurar(long id) {
-		this.repositorio.procurarEstacao(id);
+	public Estacao procurar(long id) {
+		return this.repositorio.procurarEstacao(id);
 	}
 
 	public void alterar(Estacao estacao) {

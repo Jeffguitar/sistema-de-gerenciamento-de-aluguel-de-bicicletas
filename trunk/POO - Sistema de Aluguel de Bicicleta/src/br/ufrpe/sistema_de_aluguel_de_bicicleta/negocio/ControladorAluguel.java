@@ -17,8 +17,8 @@ public class ControladorAluguel {
 			repositorio.cadastrarAluguel(aluguel);
 	}
 
-	public void procurar(String cpf) {
-		this.repositorio.procurarAluguel(cpf);
+	public Aluguel procurar(String cpf) {
+		return this.repositorio.procurarAluguel(cpf);
 	}
 
 	public void alterar(Aluguel aluguel) {
