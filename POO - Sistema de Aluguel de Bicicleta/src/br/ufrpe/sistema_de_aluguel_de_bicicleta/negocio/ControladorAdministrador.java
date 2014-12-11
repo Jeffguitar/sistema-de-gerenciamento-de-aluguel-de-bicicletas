@@ -18,8 +18,8 @@ public class ControladorAdministrador {
 			repositorio.cadastrarAdministrador(adm);
 	}
 
-	public void procurar(String cpf) {
-		this.repositorio.procurarAdministrador(cpf);
+	public Administrador procurar(String cpf) {
+		return this.repositorio.procurarAdministrador(cpf);
 	}
 
 	public void alterar(Administrador adm) {

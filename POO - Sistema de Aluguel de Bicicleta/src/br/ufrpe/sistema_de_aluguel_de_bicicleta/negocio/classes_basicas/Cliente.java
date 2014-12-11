@@ -1,6 +1,7 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class Cliente extends Usuario implements Serializable {
 	/**
@@ -9,24 +10,28 @@ public class Cliente extends Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private long id;
 	private String identidade;
-	private SexoTipo sexo; //Enum
+	private Calendar dataNascimento;
+	private SexoTipo sexo; // Enum
 	private Endereco endereco;
 	private Contato contato;
 
 	public Cliente(String nome, String cpf, long id, String identidade,
-			SexoTipo sexo, Endereco endereco, Contato contato) {
-		this(nome, cpf, identidade, sexo, endereco, contato);
+			Calendar dataNascimento, SexoTipo sexo, Endereco endereco,
+			Contato contato) {
+		this(nome, cpf, identidade, dataNascimento, sexo, endereco, contato);
 		this.id = id;
 	}
 
-	public Cliente(String nome, String cpf, String identidade, SexoTipo sexo,
-			Endereco endereco, Contato contato) {
-		this(nome, cpf, identidade, sexo);
+	public Cliente(String nome, String cpf, String identidade,
+			Calendar dataNascimento, SexoTipo sexo, Endereco endereco,
+			Contato contato) {
+		this(nome, cpf, identidade, dataNascimento, sexo);
 		this.endereco = endereco;
 		this.contato = contato;
 	}
 
-	public Cliente(String nome, String cpf, String identidade, SexoTipo sexo) {
+	public Cliente(String nome, String cpf, String identidade,
+			Calendar dataNascimento, SexoTipo sexo) {
 		this(nome, cpf);
 		this.identidade = identidade;
 		this.sexo = sexo;
@@ -34,6 +39,10 @@ public class Cliente extends Usuario implements Serializable {
 
 	public Cliente(String nome, String cpf) {
 		super(nome, cpf);
+	}
+
+	public Cliente() {
+
 	}
 
 	@Override
@@ -98,6 +107,18 @@ public class Cliente extends Usuario implements Serializable {
 
 	public void setContato(Contato contato) {
 		this.contato = contato;
+	}
+
+	public Calendar getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Calendar dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

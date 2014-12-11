@@ -12,7 +12,18 @@ public class Endereco implements Serializable {
 	private String bairro;
 	private String cep;
 
-	public Endereco() {
+	public Endereco(String endereco, String cidade, String bairro, String cep) {
+		this.endereco = endereco;
+		this.cidade = cidade;
+		this.bairro = bairro;
+		this.cep = cep;
+	}
+
+	public Endereco(String endereco, String cidade, String bairro) {
+		super();
+		this.endereco = endereco;
+		this.cidade = cidade;
+		this.bairro = bairro;
 	}
 
 	public String getEndereco() {
