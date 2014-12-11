@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Bicicleta;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
@@ -18,7 +19,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.SexoTipo
 
 public class TesteControlador {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, ClassNotFoundException, RepositorioException {
 	
 		ControladorAdministrador cAdmin = new ControladorAdministrador();
 		ControladorAluguel cAluguel = new ControladorAluguel();

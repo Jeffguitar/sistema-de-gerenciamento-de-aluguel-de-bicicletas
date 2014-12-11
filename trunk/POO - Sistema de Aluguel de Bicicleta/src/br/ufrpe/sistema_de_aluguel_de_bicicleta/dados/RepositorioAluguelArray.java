@@ -1,5 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,20 +15,95 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 public class RepositorioAluguelArray {
 	private List<Aluguel> listaAluguel;
 	private static RepositorioAluguelArray repositorio;
+	private final String ARQUIVO = "aluguel.dat";
+	private File arquivoAluguel;
 
-	private RepositorioAluguelArray() {
-		this.listaAluguel = new ArrayList<Aluguel>();
+	private RepositorioAluguelArray() throws ClassNotFoundException,
+			RepositorioException {
+		try {
+			this.listaAluguel = new ArrayList<Aluguel>();
+			this.arquivoAluguel = new File(this.ARQUIVO);
+			this.arquivoAluguel.createNewFile();
+			if (this.arquivoAluguel.length() != 0)
+				this.lerArquivo();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RepositorioException("Erro na abertura do arquivo "
+					+ this.ARQUIVO + ".");
+		}
 	}
 
-	public static RepositorioAluguelArray getInstance() {
+	public static RepositorioAluguelArray getInstance()
+			throws ClassNotFoundException, RepositorioException {
 		if (repositorio == null) {
 			repositorio = new RepositorioAluguelArray();
 		}
 		return repositorio;
 	}
 
-	public void cadastrarAluguel(Aluguel aluguel) {
+	private void lerArquivo() throws RepositorioException,
+			ClassNotFoundException {
+		FileInputStream fisAluguel = null;
+		ObjectInputStream oisAluguel = null;
+		try {
+			fisAluguel = new FileInputStream(arquivoAluguel);
+			oisAluguel = new ObjectInputStream(fisAluguel);
+			while (true) {
+				try {
+					Aluguel aluguel = (Aluguel) oisAluguel.readObject();
+					this.cadastrarAluguel(aluguel);
+				} catch (EOFException e) {
+					break;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RepositorioException("Erro na leitura do arquivo "
+					+ this.ARQUIVO + ".");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new RepositorioException("Erro na leitura do objeto. Objeto "
+					+ (new RepositorioAluguelArray()).getClass()
+					+ " não encontrado.");
+		} finally {
+			try {
+				fisAluguel.close();
+				oisAluguel.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RepositorioException("Erro no fechamento do arquivo "
+						+ this.ARQUIVO + ".");
+			}
+		}
+	}
+
+	private void gravarArquivo() throws RepositorioException {
+		FileOutputStream fosRestaurante = null;
+		ObjectOutputStream oosRestaurante = null;
+		try {
+			fosRestaurante = new FileOutputStream(arquivoAluguel);
+			oosRestaurante = new ObjectOutputStream(fosRestaurante);
+			for (Aluguel aluguel : this.listaAluguel)
+				oosRestaurante.writeObject(aluguel);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RepositorioException("Erro na gravação do arquivo "
+					+ this.ARQUIVO + ".");
+		} finally {
+			try {
+				fosRestaurante.close();
+				oosRestaurante.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RepositorioException("Erro no fechamento do arquivo "
+						+ this.ARQUIVO + ".");
+			}
+		}
+	}
+
+	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException {
 		this.listaAluguel.add(aluguel);
+		this.gravarArquivo();
 	}
 
 	public Aluguel procurarAluguel(String cpf) {
@@ -30,11 +112,11 @@ public class RepositorioAluguelArray {
 
 	}
 
-	public void alterarAluguel(Aluguel aluguel) {
+	public void alterarAluguel(Aluguel aluguel) throws RepositorioException {
 		int indice = this.obterIndice(aluguel.getCliente().getCpf());
 		// precisa do índice pra setar na posição correta
 		this.listaAluguel.set(indice, aluguel);
-
+		this.gravarArquivo();
 	}
 
 	public boolean existe(String cpf) {
@@ -46,11 +128,12 @@ public class RepositorioAluguelArray {
 		return existe;
 	}
 
-	public boolean excluirAluguel(String cpf) {
+	public boolean excluirAluguel(String cpf) throws RepositorioException {
 		int indice = this.obterIndice(cpf);
 		// preicsa usar um try, catch, informando que a conta não existe
 		if (indice != -1) {
 			this.listaAluguel.remove(indice);
+			this.gravarArquivo();
 			return true;
 		}
 		return false;
@@ -94,21 +177,21 @@ public class RepositorioAluguelArray {
 	// return retornoBusca; // retorna NULL se não encontrar o listaAluguel
 	// }
 
-	/*
-	 * public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
-	 * Cliente cliente) { boolean retorno = this.isAlugada(codigoEstacao,
-	 * codigoBicicleta); ; int indiceEstacao =
-	 * this.procurarPeloIndice(codigoEstacao); int indiceBicicletaEstacao =
-	 * this.procurarIndiceBicicletaEstacao( codigoEstacao, codigoBicicleta);
-	 * 
-	 * if (retorno == false && indiceEstacao != -1 && indiceBicicletaEstacao !=
-	 * -1) { this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	 * .setCliente(cliente); // Insere um cliente em uma // determinada
-	 * bicicleta
-	 * this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	 * .setAlugou(true); // Informa que a bicicleta encontra-se // alugada //
-	 * Falta implementar o armazenamento da hora } }
-	 */
+	//
+	// public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
+	// Cliente cliente) { boolean retorno = this.isAlugada(codigoEstacao,
+	// codigoBicicleta); ; int indiceEstacao =
+	// this.procurarPeloIndice(codigoEstacao); int indiceBicicletaEstacao =
+	// this.procurarIndiceBicicletaEstacao( codigoEstacao, codigoBicicleta);
+	//
+	// if (retorno == false && indiceEstacao != -1 && indiceBicicletaEstacao !=
+	// -1) { this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
+	// .setCliente(cliente); // Insere um cliente em uma // determinada
+	// bicicleta
+	// this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
+	// .setAlugou(true); // Informa que a bicicleta encontra-se // alugada //
+	// Falta implementar o armazenamento da hora } }
+	//
 
 	// private void cadastrarBicicletaEstacao() { // Posso implementar na
 	// fachada,
