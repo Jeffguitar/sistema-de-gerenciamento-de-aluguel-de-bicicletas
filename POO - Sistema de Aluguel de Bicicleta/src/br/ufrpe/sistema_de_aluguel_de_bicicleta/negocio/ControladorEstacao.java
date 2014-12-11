@@ -1,16 +1,17 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioEstacaoArray;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 
 public class ControladorEstacao {
 	private RepositorioEstacaoArray repositorio;
 
-	public ControladorEstacao() {
+	public ControladorEstacao() throws ClassNotFoundException, RepositorioException {
 		this.repositorio = RepositorioEstacaoArray.getInstance();
 	}
 
-	public void cadastrar(Estacao estacao) {
+	public void cadastrar(Estacao estacao) throws RepositorioException {
 		boolean resposta = this.existe(estacao.getCodigo());
 
 		if (resposta == false && estacao != null)
@@ -21,7 +22,7 @@ public class ControladorEstacao {
 		return this.repositorio.procurarEstacao(id);
 	}
 
-	public void alterar(Estacao estacao) {
+	public void alterar(Estacao estacao) throws RepositorioException {
 		boolean resposta = this.existe(estacao.getCodigo());
 
 		if (resposta == false && estacao != null)
@@ -32,7 +33,7 @@ public class ControladorEstacao {
 		return this.repositorio.existe(id);
 	}
 
-	public void excluir(long id) {
+	public void excluir(long id) throws RepositorioException {
 		this.repositorio.excluirEstacao(id);
 	}
 }

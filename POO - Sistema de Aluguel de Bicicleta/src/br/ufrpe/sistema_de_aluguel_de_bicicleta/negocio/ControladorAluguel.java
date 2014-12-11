@@ -1,16 +1,18 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioAluguelArray;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 
 public class ControladorAluguel {
 	private RepositorioAluguelArray repositorio;
 
-	public ControladorAluguel() {
+	public ControladorAluguel() throws ClassNotFoundException,
+			RepositorioException {
 		this.repositorio = RepositorioAluguelArray.getInstance();
 	}
 
-	public void cadastrar(Aluguel aluguel) {
+	public void cadastrar(Aluguel aluguel) throws RepositorioException {
 		boolean resposta = this.existe(aluguel.getCliente().getCpf());
 
 		if (resposta == false && aluguel != null)
@@ -21,7 +23,7 @@ public class ControladorAluguel {
 		return this.repositorio.procurarAluguel(cpf);
 	}
 
-	public void alterar(Aluguel aluguel) {
+	public void alterar(Aluguel aluguel) throws RepositorioException {
 		boolean resposta = this.existe(aluguel.getCliente().getCpf());
 
 		if (resposta == false && aluguel != null)
@@ -33,7 +35,7 @@ public class ControladorAluguel {
 		return this.repositorio.existe(cpf);
 	}
 
-	public void excluir(String cpf) {
+	public void excluir(String cpf) throws RepositorioException {
 		this.repositorio.excluirAluguel(cpf);
 	}
 }
