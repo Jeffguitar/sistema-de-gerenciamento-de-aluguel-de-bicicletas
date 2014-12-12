@@ -48,5 +48,9 @@ public class Estacao implements Serializable {
 	public void setBicicleta(List<Bicicleta> bicicleta) {
 		this.bicicleta = bicicleta;
 	}
+	
+	public int retornaIndiceBicicleta (long codigoBicicleta){
+		return this.bicicleta.indexOf(codigoBicicleta);
+	}
 
 }
