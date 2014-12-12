@@ -34,6 +34,29 @@ public class Aluguel implements Serializable {
 		this.valor = valor;
 	}
 
+	public Aluguel(long id, Estacao estacao, Cliente cliente,
+			Calendar dataAluguel, Calendar dataDevolucao) {
+		this.id = id;
+		this.estacao = estacao;
+		this.cliente = cliente;
+		this.dataAluguel = dataAluguel;
+		this.dataDevolucao = dataDevolucao;
+	}
+
+	public Aluguel(Estacao estacao, Cliente cliente, Calendar dataAluguel) {
+		this.estacao = estacao;
+		this.cliente = cliente;
+		this.dataAluguel = dataAluguel;
+		this.dataDevolucao = null;
+		this.valor = 0;
+	}
+
+	public Aluguel(long id, Estacao estacao, Cliente cliente) {
+		this.id = id;
+		this.estacao = estacao;
+		this.cliente = cliente;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -63,7 +86,8 @@ public class Aluguel implements Serializable {
 	}
 
 	public void setDataAluguel(Calendar dataAluguel) {
-		dataAluguel = Calendar.getInstance(); // capturando a data atual no momento do aluguel
+		dataAluguel = Calendar.getInstance(); // capturando a data atual no
+												// momento do aluguel
 		this.dataAluguel = Calendar.getInstance();
 	}
 
@@ -72,7 +96,8 @@ public class Aluguel implements Serializable {
 	}
 
 	public void setDataDevolucao(Calendar dataDevolucao) {
-		dataDevolucao = Calendar.getInstance(); // capturando a data atual no momento da devolução
+		dataDevolucao = Calendar.getInstance(); // capturando a data atual no
+												// momento da devolução
 		this.dataDevolucao = dataDevolucao;
 	}
 
