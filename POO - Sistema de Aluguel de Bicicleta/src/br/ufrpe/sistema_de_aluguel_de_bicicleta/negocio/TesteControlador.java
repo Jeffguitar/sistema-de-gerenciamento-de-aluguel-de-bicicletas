@@ -64,16 +64,17 @@ public class TesteControlador {
 //		}
 		
 		// Montando a Estação e o Aluguel
-		Estacao estacao = new Estacao(1, "Estacão Marco Zero", bike);
-		cEstacao.cadastrar(estacao);
-		cCliente.cadastrar(cliente);
-		Aluguel aluguel = new Aluguel(1, estacao, cliente, dataAluguel, null, 0);
-		cAluguel.procurar("10541030469").getEstacao().getBicicleta().get(2).setAlugou(true);
-		cAluguel.procurar("10541030469").setDataAluguel(dataAluguel);
-		cAluguel.cadastrar(aluguel);
+//		Estacao estacao = new Estacao(1, "Estacão Marco Zero", bike);
+//		cEstacao.cadastrar(estacao);
+//		cCliente.cadastrar(cliente);
+//		Aluguel aluguel = new Aluguel(1, estacao, cliente, dataAluguel, null, 0);
+//		cAluguel.cadastrar(aluguel);
+//		cAluguel.procurar("10541030469").getEstacao().getBicicleta().get(2).setAlugou(true);
+//		cAluguel.procurar("10541030469").setDataAluguel(dataAluguel);
+		
 		
 		System.out.println(formato.format(cAluguel.procurar("10541030469").getDataAluguel().getTime()));
 		System.out.println(cAluguel.procurar("10541030469").getCliente().getNome());
-		//System.out.println(cAluguel.procurar("10541030469").getEstacao().gw);
+		System.out.println(cAluguel.procurar("10541030469").getEstacao().getDescricao());
 	}
 }

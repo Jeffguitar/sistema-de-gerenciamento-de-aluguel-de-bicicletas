@@ -12,7 +12,7 @@ public interface IFachada {
 			long codigoBicicleta) throws RepositorioException;
 
 	public void devolverBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta);
+			long codigoBicicleta) throws RepositorioException;
 
 	// Início Administrador
 
@@ -33,10 +33,12 @@ public interface IFachada {
 	public void cadastrarAluguel(Aluguel adm) throws RepositorioException;
 
 	public void procurarAluguel(String cpf);
+	
+	public void procurarBicicletaNoAluguel(String cpf, int idBicicleta);
 
 	public void alterarAluguel(Aluguel adm) throws RepositorioException;
 
-	public void excluirAluguel(String cpf) throws RepositorioException;
+	public void excluirAluguel(long id) throws RepositorioException;
 
 	// Fim Aluguel
 
