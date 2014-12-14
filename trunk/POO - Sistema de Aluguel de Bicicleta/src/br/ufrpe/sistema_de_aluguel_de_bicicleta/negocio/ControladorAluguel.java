@@ -22,6 +22,10 @@ public class ControladorAluguel {
 	public Aluguel procurar(String cpf) {
 		return this.repositorio.procurarAluguel(cpf);
 	}
+	
+	public Aluguel procurarBicicletaNoAluguel(String cpf, int idBicicleta){
+		return this.repositorio.procurarAluguel(cpf, idBicicleta);
+	}
 
 	public void alterar(Aluguel aluguel) throws RepositorioException {
 		boolean resposta = this.existe(aluguel.getCliente().getCpf());
@@ -30,12 +34,11 @@ public class ControladorAluguel {
 			this.repositorio.alterarAluguel(aluguel);
 	}
 
-	public boolean existe(String cpf) {
-
+	public boolean existe(String cpf){
 		return this.repositorio.existe(cpf);
 	}
 
-	public void excluir(String cpf) throws RepositorioException {
-		this.repositorio.excluirAluguel(cpf);
+	public void excluir(long id) throws RepositorioException {
+		this.repositorio.excluirAluguel(id);
 	}
 }

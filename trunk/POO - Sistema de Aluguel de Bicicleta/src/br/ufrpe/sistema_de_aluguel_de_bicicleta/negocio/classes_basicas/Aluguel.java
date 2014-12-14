@@ -50,6 +50,14 @@ public class Aluguel implements Serializable {
 		this.dataDevolucao = null;
 		this.valor = 0;
 	}
+	
+	public Aluguel(long id, Estacao estacao, Cliente cliente, Calendar dataAluguel) {
+		this.estacao = estacao;
+		this.cliente = cliente;
+		this.dataAluguel = dataAluguel;
+		this.dataDevolucao = null;
+		this.valor = 0;
+	}
 
 	public Aluguel(long id, Estacao estacao, Cliente cliente) {
 		this.id = id;

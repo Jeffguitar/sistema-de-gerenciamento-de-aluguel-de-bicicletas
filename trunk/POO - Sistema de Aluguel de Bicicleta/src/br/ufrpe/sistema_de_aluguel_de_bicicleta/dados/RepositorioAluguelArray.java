@@ -112,8 +112,14 @@ public class RepositorioAluguelArray {
 
 	}
 
+	public Aluguel procurarAluguel(String cpf, int idBicicleta) {
+		int indice = this.obterIndice(cpf, idBicicleta);
+		return this.listaAluguel.get(indice);
+
+	}
+
 	public void alterarAluguel(Aluguel aluguel) throws RepositorioException {
-		int indice = this.obterIndice(aluguel.getCliente().getCpf());
+		int indice = this.obterIndice(aluguel.getCliente().getId());
 		// precisa do índice pra setar na posição correta
 		this.listaAluguel.set(indice, aluguel);
 		this.gravarArquivo();
@@ -128,8 +134,8 @@ public class RepositorioAluguelArray {
 		return existe;
 	}
 
-	public boolean excluirAluguel(String cpf) throws RepositorioException {
-		int indice = this.obterIndice(cpf);
+	public boolean excluirAluguel(long id) throws RepositorioException {
+		int indice = this.obterIndice(id);
 		// preicsa usar um try, catch, informando que a conta não existe
 		if (indice != -1) {
 			this.listaAluguel.remove(indice);
@@ -139,11 +145,37 @@ public class RepositorioAluguelArray {
 		return false;
 	}
 
+	private int obterIndice(long id) {
+		int indice = -1;
+
+		for (int i = 0; i < this.listaAluguel.size(); i++) {
+			if (this.listaAluguel.get(i).getId() == id) {
+				indice = i;
+			}
+			// tratar um exceção do tipo se a conta não foi encontrada
+		}
+		return indice; // Retorna -1 se não encontrou
+	}
+
 	private int obterIndice(String cpf) {
 		int indice = -1;
 
 		for (int i = 0; i < this.listaAluguel.size(); i++) {
 			if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)) {
+				indice = i;
+			}
+			// tratar um exceção do tipo se a conta não foi encontrada
+		}
+		return indice; // Retorna -1 se não encontrou
+	}
+
+	private int obterIndice(String cpf, int idBicicleta) {
+		int indice = -1;
+
+		for (int i = 0; i < this.listaAluguel.size(); i++) {
+			if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)
+					&& this.listaAluguel.get(i).getEstacao().getBicicleta()
+							.get(idBicicleta).getAlugou() == true) {
 				indice = i;
 			}
 			// tratar um exceção do tipo se a conta não foi encontrada
