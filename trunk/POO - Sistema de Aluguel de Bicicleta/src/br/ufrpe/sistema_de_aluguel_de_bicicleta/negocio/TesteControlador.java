@@ -73,8 +73,8 @@ public class TesteControlador {
 //		cAluguel.procurar("10541030469").setDataAluguel(dataAluguel);
 		
 		
-		System.out.println(formato.format(cAluguel.procurar("10541030469").getDataAluguel().getTime()));
-		System.out.println(cAluguel.procurar("10541030469").getCliente().getNome());
-		System.out.println(cAluguel.procurar("10541030469").getEstacao().getDescricao());
+//		System.out.println(formato.format(cAluguel.procurar("10541030469").getDataAluguel().getTime()));
+//		System.out.println(cAluguel.procurar("10541030469").getCliente().getNome());
+//		System.out.println(cAluguel.procurar("10541030469").getEstacao().getDescricao());
 	}
 }

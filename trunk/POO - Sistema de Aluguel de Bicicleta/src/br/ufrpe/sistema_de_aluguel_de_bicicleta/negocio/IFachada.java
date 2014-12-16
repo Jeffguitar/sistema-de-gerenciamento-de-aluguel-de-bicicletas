@@ -23,6 +23,8 @@ public interface IFachada {
 
 	public void alterarAdministrador(Administrador adm)
 			throws RepositorioException;
+	
+	public boolean existeAdministrador(String cpf);
 
 	public void excluirAdministrador(String cpf) throws RepositorioException;
 
@@ -30,15 +32,19 @@ public interface IFachada {
 
 	// Início Aluguel
 
-	public void cadastrarAluguel(Aluguel adm) throws RepositorioException;
-
-	public void procurarAluguel(String cpf);
+	public void cadastrarAluguel(String cpf, long idBicicleta) throws RepositorioException;
 	
-	public void procurarBicicletaNoAluguel(String cpf, int idBicicleta);
+	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException;
 
-	public void alterarAluguel(Aluguel adm) throws RepositorioException;
+	public void procurarAluguel(String cpf, long idBicicleta);
+	
+	public void procurarAluguel(long id);
 
-	public void excluirAluguel(long id) throws RepositorioException;
+	public void alterarAluguel(String cpf, long idBicicleta) throws RepositorioException;
+	
+	public boolean existeAluguel(String cpf, long idBicicleta);
+
+	public void excluirAluguel(String cpf, long idBicicleta) throws RepositorioException;
 
 	// Fim Aluguel
 

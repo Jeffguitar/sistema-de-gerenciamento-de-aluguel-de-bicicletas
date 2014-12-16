@@ -13,32 +13,40 @@ public class ControladorAluguel {
 	}
 
 	public void cadastrar(Aluguel aluguel) throws RepositorioException {
-		boolean resposta = this.existe(aluguel.getCliente().getCpf());
-
-		if (resposta == false && aluguel != null)
+		if (aluguel == null)
 			repositorio.cadastrarAluguel(aluguel);
 	}
 
-	public Aluguel procurar(String cpf) {
-		return this.repositorio.procurarAluguel(cpf);
+	public void cadastrar(String cpf, long idBicicleta)
+			throws RepositorioException {
+		Aluguel aluguel = this.procurar(cpf, idBicicleta);
+
+		if (aluguel == null)
+			repositorio.cadastrarAluguel(aluguel);
 	}
-	
-	public Aluguel procurarBicicletaNoAluguel(String cpf, int idBicicleta){
+
+	public Aluguel procurar(String cpf, long idBicicleta) {
 		return this.repositorio.procurarAluguel(cpf, idBicicleta);
 	}
 
-	public void alterar(Aluguel aluguel) throws RepositorioException {
-		boolean resposta = this.existe(aluguel.getCliente().getCpf());
+	public Aluguel procurar(long id) {
+		return this.repositorio.procurarAluguel(id);
+	}
 
-		if (resposta == false && aluguel != null)
+	public void alterar(String cpf, long idBicicleta)
+			throws RepositorioException {
+		Aluguel aluguel = this.procurar(cpf, idBicicleta);
+
+		if (aluguel != null)
 			this.repositorio.alterarAluguel(aluguel);
 	}
 
-	public boolean existe(String cpf){
-		return this.repositorio.existe(cpf);
+	public boolean existe(String cpf, long idBicicleta) {
+		return this.repositorio.existe(cpf, idBicicleta);
 	}
 
-	public void excluir(long id) throws RepositorioException {
-		this.repositorio.excluirAluguel(id);
+	public void excluir(String cpf, long idBicicleta)
+			throws RepositorioException {
+		this.repositorio.excluirAluguel(cpf, idBicicleta);
 	}
 }

@@ -37,13 +37,21 @@ public class Fachada implements IFachada {
 						.get(indiceBicicletaNoArray).getAlugou() == false) {
 					Cliente cliente = this.cliente.procurar(cpf);
 					Estacao estacao = this.estacao.procurar(codigoEstacao);
-					estacao.getBicicleta().get(indiceBicicletaNoArray)
+					estacao.getBicicleta()
+							.get(estacao
+									.retornaIndiceBicicleta(codigoBicicleta))
 							.setAlugou(true);
 					Aluguel a = new Aluguel(Fachada.ID_ALUGUEL, estacao,
 							cliente, Calendar.getInstance(Locale.getDefault()));
-					this.aluguel.cadastrar(a);
-					Fachada.ID_ALUGUEL++;
-
+					if (!this.aluguel.existe(
+							a.getCliente().getCpf(),
+							a.getEstacao()
+									.getBicicleta()
+									.get(a.getEstacao().retornaIndiceBicicleta(
+											codigoBicicleta)).getCodigo())) {
+						this.aluguel.cadastrar(a);
+						Fachada.ID_ALUGUEL++;
+					}
 				}
 			}
 		}
@@ -52,13 +60,14 @@ public class Fachada implements IFachada {
 	@Override
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException {
-		if (this.aluguel.existe(cpf)) { // tratar exceção do tipo
-										// 'aluguelInexistenteException'
-										// (sugestão)
+		if (this.aluguel.existe(cpf, codigoBicicleta)) { // tratar exceção do
+															// tipo
+			// 'aluguelInexistenteException'
+			// (sugestão)
 			int indiceBicicletaNoArray = this.estacao.procurar(codigoEstacao)
 					.retornaIndiceBicicleta(codigoBicicleta);
-			Aluguel aluguelRetorno = this.aluguel.procurarBicicletaNoAluguel(
-					cpf, indiceBicicletaNoArray);
+			Aluguel aluguelRetorno = this.aluguel
+					.procurar(cpf, codigoBicicleta);
 			aluguelRetorno.getEstacao().getBicicleta()
 					.get(indiceBicicletaNoArray).setAlugou(false);
 			double preco = this.calcularAluguel(
@@ -68,7 +77,14 @@ public class Fachada implements IFachada {
 					aluguelRetorno.getEstacao(), aluguelRetorno.getCliente(),
 					aluguelRetorno.getDataAluguel(),
 					Calendar.getInstance(Locale.getDefault()), preco);
-			this.aluguel.alterar(aluguelPersistente);
+			this.aluguel.alterar(
+					aluguelPersistente.getCliente().getCpf(),
+					aluguelPersistente
+							.getEstacao()
+							.getBicicleta()
+							.get(aluguelPersistente.getEstacao()
+									.retornaIndiceBicicleta(codigoBicicleta))
+							.getCodigo());
 		}
 	}
 
@@ -109,103 +125,114 @@ public class Fachada implements IFachada {
 	@Override
 	public void cadastrarAdministrador(Administrador adm)
 			throws RepositorioException {
-		// TODO Auto-generated method stub
+		this.adm.cadastrar(adm);
 
 	}
 
 	@Override
 	public void procurarAdministrador(String cpf) {
-		// TODO Auto-generated method stub
+		this.adm.procurar(cpf);
 
 	}
 
 	@Override
 	public void alterarAdministrador(Administrador adm)
 			throws RepositorioException {
-		// TODO Auto-generated method stub
+		this.adm.alterar(adm);
+
+	}
+
+	@Override
+	public boolean existeAdministrador(String cpf) {
+		return this.adm.existe(cpf);
 
 	}
 
 	@Override
 	public void excluirAdministrador(String cpf) throws RepositorioException {
-		// TODO Auto-generated method stub
+		this.adm.excluir(cpf);
 
 	}
 
 	@Override
-	public void cadastrarAluguel(Aluguel adm) throws RepositorioException {
-		// TODO Auto-generated method stub
+	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException {
+		this.aluguel.cadastrar(aluguel);
+	}
+
+	@Override
+	public void cadastrarAluguel(String cpf, long idBicicleta)
+			throws RepositorioException {
+		this.aluguel.cadastrar(cpf, idBicicleta);
 
 	}
 
 	@Override
-	public void procurarAluguel(String cpf) {
-		// TODO Auto-generated method stub
+	public void procurarAluguel(String cpf, long idBicicleta) {
+		this.aluguel.procurar(cpf, idBicicleta);
 
 	}
 
-	public void procurarBicicletaNoAluguel(String cpf, int idBicicleta) {
+	public void procurarAluguel(long id) {
+		this.aluguel.procurar(id);
+	}
+
+	@Override
+	public void alterarAluguel(String cpf, long idBicicleta)
+			throws RepositorioException {
+		this.aluguel.alterar(cpf, idBicicleta);
 
 	}
 
 	@Override
-	public void alterarAluguel(Aluguel adm) throws RepositorioException {
-		// TODO Auto-generated method stub
+	public boolean existeAluguel(String cpf, long idBicicleta) {
+		return this.aluguel.existe(cpf, idBicicleta);
 
 	}
 
 	@Override
-	public void excluirAluguel(long id) throws RepositorioException {
-		// TODO Auto-generated method stub
+	public void excluirAluguel(String cpf, long idBicicleta)
+			throws RepositorioException {
+		this.aluguel.excluir(cpf, idBicicleta);
 
 	}
 
 	@Override
 	public void cadastrarCliente(Cliente cliente) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.cliente.cadastrar(cliente);
 	}
 
 	@Override
 	public void procurarCliente(String cpf) {
-		// TODO Auto-generated method stub
-
+		this.cliente.procurar(cpf);
 	}
 
 	@Override
 	public void alterarCliente(Cliente cliente) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.cliente.alterar(cliente);
 	}
 
 	@Override
 	public void excluirCliente(String cpf) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.cliente.excluir(cpf);
 	}
 
 	@Override
 	public void cadastrarEstacao(Estacao estacao) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.estacao.cadastrar(estacao);
 	}
 
 	@Override
 	public void procurarEstacao(long id) {
-		// TODO Auto-generated method stub
-
+		this.estacao.procurar(id);
 	}
 
 	@Override
 	public void alterarEstacao(Estacao estacao) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.estacao.alterar(estacao);
 	}
 
 	@Override
 	public void excluirEstacao(long id) throws RepositorioException {
-		// TODO Auto-generated method stub
-
+		this.estacao.excluir(id);
 	}
-
 }
