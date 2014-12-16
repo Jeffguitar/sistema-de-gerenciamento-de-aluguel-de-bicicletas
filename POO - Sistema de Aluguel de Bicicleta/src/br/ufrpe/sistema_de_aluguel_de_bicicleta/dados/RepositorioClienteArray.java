@@ -127,15 +127,13 @@ public class RepositorioClienteArray {
 		return existe;
 	}
 
-	public boolean excluirCliente(String cpf) throws RepositorioException {
+	public void excluirCliente(String cpf) throws RepositorioException {
 		int indice = this.obterIndice(cpf);
 		// preicsa usar um try, catch, informando que o cliente não existe
 		if (indice != -1) {
 			this.listaCliente.remove(indice);
 			this.gravarArquivo();
-			return true;
 		}
-		return false;
 	}
 
 	private int obterIndice(String cpf) {

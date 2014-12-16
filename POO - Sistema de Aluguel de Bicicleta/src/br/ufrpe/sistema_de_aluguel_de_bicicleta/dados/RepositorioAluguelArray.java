@@ -106,15 +106,18 @@ public class RepositorioAluguelArray {
 		this.gravarArquivo();
 	}
 
-	public Aluguel procurarAluguel(String cpf) {
-		int indice = this.obterIndice(cpf);
+	public Aluguel procurarAluguel(String cpf, long idBicicleta) {
+		int indice = this.obterIndice(cpf, idBicicleta);
 		return this.listaAluguel.get(indice);
 
 	}
 
-	public Aluguel procurarAluguel(String cpf, int idBicicleta) {
-		int indice = this.obterIndice(cpf, idBicicleta);
-		return this.listaAluguel.get(indice);
+	public Aluguel procurarAluguel(long id) {
+		int indice = this.obterIndice(id);
+		if (indice != -1) {
+			return this.listaAluguel.get(indice);
+		}
+		return null;
 
 	}
 
@@ -125,17 +128,18 @@ public class RepositorioAluguelArray {
 		this.gravarArquivo();
 	}
 
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf, long idBicicleta) {
 		boolean existe = false;
-		int indice = this.obterIndice(cpf);
+		int indice = this.obterIndice(cpf, idBicicleta);
 
 		if (indice != -1)
 			return existe = true;
 		return existe;
 	}
 
-	public boolean excluirAluguel(long id) throws RepositorioException {
-		int indice = this.obterIndice(id);
+	public boolean excluirAluguel(String cpf, long idBicicleta)
+			throws RepositorioException {
+		int indice = this.obterIndice(cpf, idBicicleta);
 		// preicsa usar um try, catch, informando que a conta não existe
 		if (indice != -1) {
 			this.listaAluguel.remove(indice);
@@ -169,13 +173,18 @@ public class RepositorioAluguelArray {
 		return indice; // Retorna -1 se não encontrou
 	}
 
-	private int obterIndice(String cpf, int idBicicleta) {
+	private int obterIndice(String cpf, long idBicicleta) {
 		int indice = -1;
 
 		for (int i = 0; i < this.listaAluguel.size(); i++) {
 			if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)
-					&& this.listaAluguel.get(i).getEstacao().getBicicleta()
-							.get(idBicicleta).getAlugou() == true) {
+					&& this.listaAluguel
+							.get(i)
+							.getEstacao()
+							.getBicicleta()
+							.get(this.listaAluguel.get(i).getEstacao()
+									.retornaIndiceBicicleta(idBicicleta))
+							.getAlugou() == true) {
 				indice = i;
 			}
 			// tratar um exceção do tipo se a conta não foi encontrada
