@@ -1,8 +1,5 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
-import java.util.Calendar;
-import java.util.Locale;
-
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
@@ -29,97 +26,13 @@ public class Fachada implements IFachada {
 	@Override
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException {
-		if (this.cliente.existe(cpf)) {
-			if (this.estacao.existe(codigoEstacao)) {
-				int indiceBicicletaNoArray = this.estacao.procurar(
-						codigoEstacao).retornaIndiceBicicleta(codigoBicicleta);
-				if (this.estacao.procurar(codigoEstacao).getBicicleta()
-						.get(indiceBicicletaNoArray).getAlugou() == false) {
-					Cliente cliente = this.cliente.procurar(cpf);
-					Estacao estacao = this.estacao.procurar(codigoEstacao);
-					estacao.getBicicleta()
-							.get(estacao
-									.retornaIndiceBicicleta(codigoBicicleta))
-							.setAlugou(true);
-					Aluguel a = new Aluguel(Fachada.ID_ALUGUEL, estacao,
-							cliente, Calendar.getInstance(Locale.getDefault()));
-					if (!this.aluguel.existe(
-							a.getCliente().getCpf(),
-							a.getEstacao()
-									.getBicicleta()
-									.get(a.getEstacao().retornaIndiceBicicleta(
-											codigoBicicleta)).getCodigo())) {
-						this.aluguel.cadastrar(a);
-						Fachada.ID_ALUGUEL++;
-					}
-				}
-			}
-		}
+		this.aluguel.alugarBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
 	@Override
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException {
-		if (this.aluguel.existe(cpf, codigoBicicleta)) { // tratar exceção do
-															// tipo
-			// 'aluguelInexistenteException'
-			// (sugestão)
-			int indiceBicicletaNoArray = this.estacao.procurar(codigoEstacao)
-					.retornaIndiceBicicleta(codigoBicicleta);
-			Aluguel aluguelRetorno = this.aluguel
-					.procurar(cpf, codigoBicicleta);
-			aluguelRetorno.getEstacao().getBicicleta()
-					.get(indiceBicicletaNoArray).setAlugou(false);
-			double preco = this.calcularAluguel(
-					aluguelRetorno.getDataAluguel(),
-					Calendar.getInstance(Locale.getDefault()));
-			Aluguel aluguelPersistente = new Aluguel(aluguelRetorno.getId(),
-					aluguelRetorno.getEstacao(), aluguelRetorno.getCliente(),
-					aluguelRetorno.getDataAluguel(),
-					Calendar.getInstance(Locale.getDefault()), preco);
-			this.aluguel.alterar(
-					aluguelPersistente.getCliente().getCpf(),
-					aluguelPersistente
-							.getEstacao()
-							.getBicicleta()
-							.get(aluguelPersistente.getEstacao()
-									.retornaIndiceBicicleta(codigoBicicleta))
-							.getCodigo());
-		}
-	}
-
-	private double calcularAluguel(Calendar aluguel, Calendar devolucao) {
-		double preco = 0.0;
-
-		int mes = devolucao.get(Calendar.MONTH) - aluguel.get(Calendar.MONTH);
-		int dia = devolucao.get(Calendar.DAY_OF_MONTH)
-				- aluguel.get(Calendar.DAY_OF_MONTH);
-		int hora = devolucao.get(Calendar.HOUR_OF_DAY)
-				- aluguel.get(Calendar.HOUR_OF_DAY);
-		int minuto = devolucao.get(Calendar.MINUTE)
-				- aluguel.get(Calendar.MINUTE);
-		int segundo = devolucao.get(Calendar.SECOND)
-				- aluguel.get(Calendar.SECOND);
-
-		if (mes == 0 && dia == 0) {
-			if ((hora == 0 && (minuto >= 0 && minuto < 60) && (segundo >= 0 && segundo < 60))
-					|| (hora == 1 && minuto == 0 && segundo == 0)) { // De 0:0:0
-																		// até
-																		// 0:59:59
-																		// OU de
-																		// 1:0:0
-				preco = 0.0;
-			} else if ((hora > 1 && (minuto >= 0 && minuto < 60) && (segundo > 0 && segundo < 60))
-					|| (hora == 2 && minuto == 0 && segundo == 0)) { // De 1:0:1
-																		// até
-																		// 1:59:59
-																		// OU de
-																		// 2:0:0
-				preco = 3;
-			} else
-				preco = hora * 7;
-		}
-		return preco;
+		this.aluguel.devolverBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
 	@Override
