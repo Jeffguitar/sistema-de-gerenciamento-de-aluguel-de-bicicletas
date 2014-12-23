@@ -161,17 +161,7 @@ public class RepositorioAluguelArray {
 		return indice; // Retorna -1 se não encontrou
 	}
 
-	private int obterIndice(String cpf) {
-		int indice = -1;
 
-		for (int i = 0; i < this.listaAluguel.size(); i++) {
-			if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)) {
-				indice = i;
-			}
-			// tratar um exceção do tipo se a conta não foi encontrada
-		}
-		return indice; // Retorna -1 se não encontrou
-	}
 
 	private int obterIndice(String cpf, long idBicicleta) {
 		int indice = -1;
@@ -191,6 +181,18 @@ public class RepositorioAluguelArray {
 		}
 		return indice; // Retorna -1 se não encontrou
 	}
+	
+	// private int obterIndice(String cpf) {
+	// int indice = -1;
+	//
+	// for (int i = 0; i < this.listaAluguel.size(); i++) {
+	// if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)) {
+	// indice = i;
+	// }
+	// // tratar um exceção do tipo se a conta não foi encontrada
+	// }
+	// return indice; // Retorna -1 se não encontrou
+	// }
 
 	// public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
 	// Estacao estacaoEncontrada = this.procurarEstacao(codigoEstacao);
