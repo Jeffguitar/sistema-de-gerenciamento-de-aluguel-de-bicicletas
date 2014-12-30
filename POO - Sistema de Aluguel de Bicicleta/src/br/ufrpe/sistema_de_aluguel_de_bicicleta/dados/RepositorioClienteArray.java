@@ -10,7 +10,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 
 public class RepositorioClienteArray {
 
@@ -20,7 +22,7 @@ public class RepositorioClienteArray {
 	private File arquivoCliente;
 
 	private RepositorioClienteArray() throws ClassNotFoundException,
-			RepositorioException {
+			RepositorioException, ClienteJaCadastradoException {
 		try {
 			this.listaCliente = new ArrayList<Cliente>();
 			this.arquivoCliente = new File(this.ARQUIVO);
@@ -35,7 +37,8 @@ public class RepositorioClienteArray {
 	}
 
 	public static RepositorioClienteArray getInstance()
-			throws ClassNotFoundException, RepositorioException {
+			throws ClassNotFoundException, RepositorioException,
+			ClienteJaCadastradoException {
 		if (repositorio == null) {
 			repositorio = new RepositorioClienteArray();
 		}
@@ -43,7 +46,7 @@ public class RepositorioClienteArray {
 	}
 
 	private void lerArquivo() throws RepositorioException,
-			ClassNotFoundException {
+			ClassNotFoundException, ClienteJaCadastradoException {
 		FileInputStream fisCliente = null;
 		ObjectInputStream oisCliente = null;
 		try {
@@ -102,23 +105,30 @@ public class RepositorioClienteArray {
 		}
 	}
 
-	public void cadastrarCliente(Cliente cliente) throws RepositorioException {
+	public void cadastrarCliente(Cliente cliente) throws RepositorioException,
+			ClienteJaCadastradoException {
 		this.listaCliente.add(cliente);
 		this.gravarArquivo();
 	}
 
-	public Cliente procurarCliente(String cpf) {
+	public Cliente procurarCliente(String cpf)
+			throws ClienteNaoCadastradoException {
 		int indice = this.obterIndice(cpf);
+		if (indice == -1)
+			throw new ClienteNaoCadastradoException(cpf);
 		return this.listaCliente.get(indice);
 	}
 
-	public void alterarCliente(Cliente cliente) throws RepositorioException {
+	public void alterarCliente(Cliente cliente) throws RepositorioException,
+			ClienteNaoCadastradoException {
 		int indice = this.obterIndice(cliente.getCpf());
+		if (indice == -1)
+			throw new ClienteNaoCadastradoException(cliente.getCpf());
 		this.listaCliente.set(indice, cliente);
 		this.gravarArquivo();
 	}
 
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf) throws ClienteNaoCadastradoException {
 		boolean existe = false;
 		int indice = this.obterIndice(cpf);
 
@@ -127,13 +137,15 @@ public class RepositorioClienteArray {
 		return existe;
 	}
 
-	public void excluirCliente(String cpf) throws RepositorioException {
+	public void excluirCliente(String cpf) throws RepositorioException,
+			ClienteNaoCadastradoException {
 		int indice = this.obterIndice(cpf);
-		// preicsa usar um try, catch, informando que o cliente não existe
+		// precisa usar um try, catch, informando que o cliente não existe
 		if (indice != -1) {
 			this.listaCliente.remove(indice);
 			this.gravarArquivo();
-		}
+		} else
+			throw new ClienteNaoCadastradoException(cpf);
 	}
 
 	private int obterIndice(String cpf) {

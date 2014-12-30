@@ -1,15 +1,17 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 
 public interface IFachada {
 
 	public void alugarBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta) throws RepositorioException;
+			long codigoBicicleta) throws RepositorioException, ClienteNaoCadastradoException;
 
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException;
@@ -50,13 +52,13 @@ public interface IFachada {
 
 	// Início Cliente
 
-	public void cadastrarCliente(Cliente cliente) throws RepositorioException;
+	public void cadastrarCliente(Cliente cliente) throws RepositorioException, ClienteJaCadastradoException, ClienteNaoCadastradoException;
 
-	public void procurarCliente(String cpf);
+	public void procurarCliente(String cpf) throws ClienteNaoCadastradoException;
 
-	public void alterarCliente(Cliente cliente) throws RepositorioException;
+	public void alterarCliente(Cliente cliente) throws RepositorioException, ClienteNaoCadastradoException;
 
-	public void excluirCliente(String cpf) throws RepositorioException;
+	public void excluirCliente(String cpf) throws RepositorioException, ClienteNaoCadastradoException;
 
 	// Fim Cliente
 
