@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Bicicleta;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
@@ -17,6 +15,8 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Contato;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Endereco;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.SexoTipo;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class TesteControlador {
 

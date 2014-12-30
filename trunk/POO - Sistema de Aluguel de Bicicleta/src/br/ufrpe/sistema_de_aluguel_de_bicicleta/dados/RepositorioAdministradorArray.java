@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class RepositorioAdministradorArray {
 	private List<Administrador> listaAdm;

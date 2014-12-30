@@ -10,9 +10,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class RepositorioClienteArray {
 
@@ -140,7 +141,7 @@ public class RepositorioClienteArray {
 	public void excluirCliente(String cpf) throws RepositorioException,
 			ClienteNaoCadastradoException {
 		int indice = this.obterIndice(cpf);
-		// precisa usar um try, catch, informando que o cliente não existe
+
 		if (indice != -1) {
 			this.listaCliente.remove(indice);
 			this.gravarArquivo();

@@ -1,4 +1,4 @@
-package br.ufrpe.sistema_de_aluguel_de_bicicleta.dados;
+package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao;
 
 public class RepositorioException extends Exception {
 
