@@ -1,10 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 
 public class Fachada implements IFachada {
 	private ControladorAdministrador adm;
@@ -16,7 +18,8 @@ public class Fachada implements IFachada {
 	public static long ID_CLIENTE = 1;
 	public static long ID_ESTACAO = 1;
 
-	public Fachada() throws ClassNotFoundException, RepositorioException {
+	public Fachada() throws ClassNotFoundException, RepositorioException,
+			ClienteJaCadastradoException {
 		this.adm = new ControladorAdministrador();
 		this.cliente = new ControladorCliente();
 		this.aluguel = new ControladorAluguel();
@@ -25,7 +28,8 @@ public class Fachada implements IFachada {
 
 	@Override
 	public void alugarBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta) throws RepositorioException {
+			long codigoBicicleta) throws RepositorioException,
+			ClienteNaoCadastradoException {
 		this.aluguel.alugarBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
@@ -110,22 +114,26 @@ public class Fachada implements IFachada {
 	}
 
 	@Override
-	public void cadastrarCliente(Cliente cliente) throws RepositorioException {
+	public void cadastrarCliente(Cliente cliente) throws RepositorioException,
+			ClienteJaCadastradoException, ClienteNaoCadastradoException {
 		this.cliente.cadastrar(cliente);
 	}
 
 	@Override
-	public void procurarCliente(String cpf) {
+	public void procurarCliente(String cpf)
+			throws ClienteNaoCadastradoException {
 		this.cliente.procurar(cpf);
 	}
 
 	@Override
-	public void alterarCliente(Cliente cliente) throws RepositorioException {
+	public void alterarCliente(Cliente cliente) throws RepositorioException,
+			ClienteNaoCadastradoException {
 		this.cliente.alterar(cliente);
 	}
 
 	@Override
-	public void excluirCliente(String cpf) throws RepositorioException {
+	public void excluirCliente(String cpf) throws RepositorioException,
+			ClienteNaoCadastradoException {
 		this.cliente.excluir(cpf);
 	}
 

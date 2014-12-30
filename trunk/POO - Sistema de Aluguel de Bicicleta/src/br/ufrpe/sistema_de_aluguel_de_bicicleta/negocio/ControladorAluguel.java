@@ -5,9 +5,11 @@ import java.util.Locale;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioAluguelArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 
 public class ControladorAluguel {
 	private RepositorioAluguelArray repositorio;
@@ -17,14 +19,14 @@ public class ControladorAluguel {
 	private long idAluguel = 1;
 
 	public ControladorAluguel() throws ClassNotFoundException,
-			RepositorioException {
+			RepositorioException, ClienteJaCadastradoException {
 		this.repositorio = RepositorioAluguelArray.getInstance();
 		this.cliente = new ControladorCliente();
 		this.estacao = new ControladorEstacao();
 	}
 
 	public void alugarBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta) throws RepositorioException {
+			long codigoBicicleta) throws RepositorioException, ClienteNaoCadastradoException {
 		if (this.cliente.existe(cpf)) { // 1 - Se cliente existe
 			if (this.estacao.existe(codigoEstacao)) { // 2 - Se a estação existe
 				int indiceBicicletaNoArray = this.estacao.procurar(
@@ -46,7 +48,7 @@ public class ControladorAluguel {
 									.get(aluguel.getEstacao()
 											.retornaIndiceBicicleta(
 													codigoBicicleta))
-									.getCodigo()) == false) {
+									.getCodigo()) == false) { // Aluga se o cliente não 'possui' uma bicicleta
 						this.cadastrar(aluguel);
 						this.idAluguel++;
 					}
