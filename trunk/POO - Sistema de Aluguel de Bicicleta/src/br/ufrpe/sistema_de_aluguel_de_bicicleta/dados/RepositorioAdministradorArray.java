@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class RepositorioAdministradorArray {
@@ -109,15 +110,19 @@ public class RepositorioAdministradorArray {
 		this.gravarArquivo();
 	}
 
-	public Administrador procurarAdministrador(String cpf) {
+	public Administrador procurarAdministrador(String cpf)
+			throws AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
+		if (indice == -1)
+			throw new AdministradorInexistenteException(cpf);
 		return this.listaAdm.get(indice);
 	}
 
 	public void alterarAdministrador(Administrador adm)
-			throws RepositorioException {
+			throws RepositorioException, AdministradorInexistenteException {
 		int indice = this.obterIndice(adm.getCpf());
-		// precisa do índice pra setar na posição correta
+		if (indice == -1)
+			throw new AdministradorInexistenteException(adm.getCpf());
 		this.listaAdm.set(indice, adm);
 		this.gravarArquivo();
 	}

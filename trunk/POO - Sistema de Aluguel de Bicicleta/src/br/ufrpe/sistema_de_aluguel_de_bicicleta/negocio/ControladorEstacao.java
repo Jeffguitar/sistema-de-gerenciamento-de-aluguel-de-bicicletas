@@ -8,6 +8,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 
 public class ControladorEstacao {
 	private RepositorioEstacaoArray repositorio;
+	private long idEstacao = 1;
 
 	public ControladorEstacao() throws ClassNotFoundException,
 			RepositorioException {
@@ -18,9 +19,11 @@ public class ControladorEstacao {
 			EstacaoExistenteException {
 		boolean resposta = this.existe(estacao.getCodigo());
 
-		if (resposta == false && estacao != null)
+		if (resposta == false && estacao != null) {
+			estacao.setCodigo(this.idEstacao);
 			repositorio.cadastrarEstacao(estacao);
-		else
+			this.idEstacao++;
+		} else
 			throw new EstacaoExistenteException("A Estação já existe!");
 	}
 
