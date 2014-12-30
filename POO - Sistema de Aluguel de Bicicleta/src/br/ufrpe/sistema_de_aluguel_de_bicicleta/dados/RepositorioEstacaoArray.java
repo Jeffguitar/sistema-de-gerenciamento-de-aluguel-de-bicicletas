@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class RepositorioEstacaoArray {
 
@@ -107,13 +109,18 @@ public class RepositorioEstacaoArray {
 		this.gravarArquivo();
 	}
 
-	public Estacao procurarEstacao(long id) {
+	public Estacao procurarEstacao(long id) throws EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
+		if (indice == -1)
+			throw new EstacaoNaoExisteException(id);
 		return this.listaEstacao.get(indice);
 	}
 
-	public void alterarEstacao(Estacao estacao) throws RepositorioException {
+	public void alterarEstacao(Estacao estacao) throws RepositorioException,
+			EstacaoNaoExisteException {
 		int indice = this.obterIndice(estacao.getCodigo());
+		if (indice == -1)
+			throw new EstacaoNaoExisteException(estacao.getCodigo());
 		this.listaEstacao.set(indice, estacao);
 		this.gravarArquivo();
 	}
@@ -127,15 +134,16 @@ public class RepositorioEstacaoArray {
 		return existe;
 	}
 
-	public boolean excluirEstacao(long id) throws RepositorioException {
+	public boolean excluirEstacao(long id) throws RepositorioException,
+			EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
-		// preicsa usar um try, catch, informando que a estação não existe
 		if (indice != -1) {
 			this.listaEstacao.remove(indice);
 			this.gravarArquivo();
 			return true;
-		}
-		return false;
+		} else
+
+			return false;
 	}
 
 	private int obterIndice(long id) {

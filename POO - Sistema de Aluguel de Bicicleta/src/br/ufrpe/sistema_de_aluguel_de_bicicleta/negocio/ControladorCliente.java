@@ -1,10 +1,10 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioClienteArray;
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class ControladorCliente {
 

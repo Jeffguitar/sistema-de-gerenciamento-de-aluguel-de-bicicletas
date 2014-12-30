@@ -1,12 +1,14 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioException;
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class Fachada implements IFachada {
 	private ControladorAdministrador adm;
@@ -29,13 +31,14 @@ public class Fachada implements IFachada {
 	@Override
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			ClienteNaoCadastradoException {
+			ClienteNaoCadastradoException, EstacaoNaoExisteException {
 		this.aluguel.alugarBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
 	@Override
 	public void devolverBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta) throws RepositorioException {
+			long codigoBicicleta) throws RepositorioException,
+			EstacaoNaoExisteException {
 		this.aluguel.devolverBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
@@ -138,22 +141,25 @@ public class Fachada implements IFachada {
 	}
 
 	@Override
-	public void cadastrarEstacao(Estacao estacao) throws RepositorioException {
+	public void cadastrarEstacao(Estacao estacao) throws RepositorioException,
+			EstacaoExistenteException {
 		this.estacao.cadastrar(estacao);
 	}
 
 	@Override
-	public void procurarEstacao(long id) {
+	public void procurarEstacao(long id) throws EstacaoNaoExisteException {
 		this.estacao.procurar(id);
 	}
 
 	@Override
-	public void alterarEstacao(Estacao estacao) throws RepositorioException {
+	public void alterarEstacao(Estacao estacao) throws RepositorioException,
+			EstacaoNaoExisteException {
 		this.estacao.alterar(estacao);
 	}
 
 	@Override
-	public void excluirEstacao(long id) throws RepositorioException {
+	public void excluirEstacao(long id) throws RepositorioException,
+			EstacaoNaoExisteException {
 		this.estacao.excluir(id);
 	}
 }
