@@ -4,7 +4,7 @@ public class ClienteNaoCadastradoException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public ClienteNaoCadastradoException(String message) {
-		super("O cliente com o RG \"" + message + "\" não foi cadastrado.");
+	public ClienteNaoCadastradoException(String cpf) {
+		super("O cliente com o CPF \"" + cpf + "\" não foi cadastrado.");
 	}
 }

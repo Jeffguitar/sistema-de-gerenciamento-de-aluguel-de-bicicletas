@@ -4,6 +4,8 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administ
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorJaExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
@@ -44,20 +46,20 @@ public class Fachada implements IFachada {
 
 	@Override
 	public void cadastrarAdministrador(Administrador adm)
-			throws RepositorioException {
+			throws RepositorioException, AdministradorJaExistenteException {
 		this.adm.cadastrar(adm);
 
 	}
 
 	@Override
-	public void procurarAdministrador(String cpf) {
+	public void procurarAdministrador(String cpf) throws AdministradorInexistenteException {
 		this.adm.procurar(cpf);
 
 	}
 
 	@Override
 	public void alterarAdministrador(Administrador adm)
-			throws RepositorioException {
+			throws RepositorioException, AdministradorInexistenteException {
 		this.adm.alterar(adm);
 
 	}
