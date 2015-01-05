@@ -28,6 +28,10 @@ public class Contato implements Serializable {
 		this.telefone = telefone;
 	}
 
+	public Contato() {
+
+	}
+
 	public String getEmail() {
 		return email;
 	}
