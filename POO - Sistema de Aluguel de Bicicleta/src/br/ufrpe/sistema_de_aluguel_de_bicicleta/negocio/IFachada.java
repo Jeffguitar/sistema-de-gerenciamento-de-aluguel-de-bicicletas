@@ -6,7 +6,10 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorJaExistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.BicicletaIndisponivelException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaAlugouBicicletaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoAlugouBicicletaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
@@ -16,18 +19,20 @@ public interface IFachada {
 
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			ClienteNaoCadastradoException, EstacaoNaoExisteException;
+			ClienteNaoCadastradoException, EstacaoNaoExisteException,
+			BicicletaIndisponivelException, ClienteJaAlugouBicicletaException;
 
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			EstacaoNaoExisteException;
+			EstacaoNaoExisteException, ClienteNaoAlugouBicicletaException;
 
 	// Início Administrador
 
 	public void cadastrarAdministrador(Administrador adm)
 			throws RepositorioException, AdministradorJaExistenteException;
 
-	public void procurarAdministrador(String cpf) throws AdministradorInexistenteException;
+	public Administrador procurarAdministrador(String cpf)
+			throws AdministradorInexistenteException;
 
 	public void alterarAdministrador(Administrador adm)
 			throws RepositorioException, AdministradorInexistenteException;
@@ -47,7 +52,7 @@ public interface IFachada {
 
 	public void procurarAluguel(String cpf, long idBicicleta);
 
-	public void procurarAluguel(long id);
+	public Aluguel procurarAluguel(long id);
 
 	public void alterarAluguel(String cpf, long idBicicleta)
 			throws RepositorioException;
@@ -64,11 +69,14 @@ public interface IFachada {
 	public void cadastrarCliente(Cliente cliente) throws RepositorioException,
 			ClienteJaCadastradoException, ClienteNaoCadastradoException;
 
-	public void procurarCliente(String cpf)
+	public Cliente procurarCliente(String cpf)
 			throws ClienteNaoCadastradoException;
 
 	public void alterarCliente(Cliente cliente) throws RepositorioException,
 			ClienteNaoCadastradoException;
+
+	public boolean existeCliente(String cpf)
+			throws ClienteNaoCadastradoException;
 
 	public void excluirCliente(String cpf) throws RepositorioException,
 			ClienteNaoCadastradoException;
@@ -80,7 +88,7 @@ public interface IFachada {
 	public void cadastrarEstacao(Estacao estacao) throws RepositorioException,
 			EstacaoExistenteException;
 
-	public void procurarEstacao(long id) throws EstacaoNaoExisteException;
+	public Estacao procurarEstacao(long id) throws EstacaoNaoExisteException;
 
 	public void alterarEstacao(Estacao estacao) throws RepositorioException,
 			EstacaoNaoExisteException;

@@ -6,7 +6,10 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorJaExistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.BicicletaIndisponivelException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaAlugouBicicletaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoAlugouBicicletaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
@@ -17,10 +20,6 @@ public class Fachada implements IFachada {
 	private ControladorCliente cliente;
 	private ControladorAluguel aluguel;
 	private ControladorEstacao estacao;
-	public static long ID_ALUGUEL = 1;
-	public static long ID_ADM = 1;
-	public static long ID_CLIENTE = 1;
-	public static long ID_ESTACAO = 1;
 
 	public Fachada() throws ClassNotFoundException, RepositorioException,
 			ClienteJaCadastradoException {
@@ -33,14 +32,15 @@ public class Fachada implements IFachada {
 	@Override
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			ClienteNaoCadastradoException, EstacaoNaoExisteException {
+			ClienteNaoCadastradoException, EstacaoNaoExisteException,
+			BicicletaIndisponivelException, ClienteJaAlugouBicicletaException {
 		this.aluguel.alugarBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
 	@Override
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			EstacaoNaoExisteException {
+			EstacaoNaoExisteException, ClienteNaoAlugouBicicletaException {
 		this.aluguel.devolverBicicleta(cpf, codigoEstacao, codigoBicicleta);
 	}
 
@@ -52,8 +52,9 @@ public class Fachada implements IFachada {
 	}
 
 	@Override
-	public void procurarAdministrador(String cpf) throws AdministradorInexistenteException {
-		this.adm.procurar(cpf);
+	public Administrador procurarAdministrador(String cpf)
+			throws AdministradorInexistenteException {
+		return this.adm.procurar(cpf);
 
 	}
 
@@ -94,8 +95,8 @@ public class Fachada implements IFachada {
 
 	}
 
-	public void procurarAluguel(long id) {
-		this.aluguel.procurar(id);
+	public Aluguel procurarAluguel(long id) {
+		return this.aluguel.procurar(id);
 	}
 
 	@Override
@@ -125,15 +126,21 @@ public class Fachada implements IFachada {
 	}
 
 	@Override
-	public void procurarCliente(String cpf)
+	public Cliente procurarCliente(String cpf)
 			throws ClienteNaoCadastradoException {
-		this.cliente.procurar(cpf);
+		return this.cliente.procurar(cpf);
 	}
 
 	@Override
 	public void alterarCliente(Cliente cliente) throws RepositorioException,
 			ClienteNaoCadastradoException {
 		this.cliente.alterar(cliente);
+	}
+
+	@Override
+	public boolean existeCliente(String cpf)
+			throws ClienteNaoCadastradoException {
+		return this.cliente.existe(cpf);
 	}
 
 	@Override
@@ -149,8 +156,8 @@ public class Fachada implements IFachada {
 	}
 
 	@Override
-	public void procurarEstacao(long id) throws EstacaoNaoExisteException {
-		this.estacao.procurar(id);
+	public Estacao procurarEstacao(long id) throws EstacaoNaoExisteException {
+		return this.estacao.procurar(id);
 	}
 
 	@Override
