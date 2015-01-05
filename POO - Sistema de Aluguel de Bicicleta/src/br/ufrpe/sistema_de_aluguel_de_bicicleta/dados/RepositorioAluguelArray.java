@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class RepositorioAluguelArray {
@@ -107,18 +108,22 @@ public class RepositorioAluguelArray {
 		this.gravarArquivo();
 	}
 
-	public Aluguel procurarAluguel(String cpf, long idBicicleta) {
+	public Aluguel procurarAluguel(String cpf, long idBicicleta)
+			throws AluguelInexistenteException {
 		int indice = this.obterIndice(cpf, idBicicleta);
-		return this.listaAluguel.get(indice);
+		if (indice != -1)
+			return this.listaAluguel.get(indice);
+		else
+			throw new AluguelInexistenteException("Aluguel Inexistente!");
 
 	}
 
-	public Aluguel procurarAluguel(long id) {
+	public Aluguel procurarAluguel(long id) throws AluguelInexistenteException {
 		int indice = this.obterIndice(id);
 		if (indice != -1) {
 			return this.listaAluguel.get(indice);
-		}
-		return null;
+		} else
+			throw new AluguelInexistenteException("Aluguel Inexistente!");
 
 	}
 
@@ -138,16 +143,14 @@ public class RepositorioAluguelArray {
 		return existe;
 	}
 
-	public boolean excluirAluguel(String cpf, long idBicicleta)
-			throws RepositorioException {
+	public void excluirAluguel(String cpf, long idBicicleta)
+			throws RepositorioException, AluguelInexistenteException {
 		int indice = this.obterIndice(cpf, idBicicleta);
-		// preicsa usar um try, catch, informando que a conta não existe
 		if (indice != -1) {
 			this.listaAluguel.remove(indice);
 			this.gravarArquivo();
-			return true;
-		}
-		return false;
+		} else
+			throw new AluguelInexistenteException("Aluguel não existe!");
 	}
 
 	private int obterIndice(long id) {
@@ -157,12 +160,9 @@ public class RepositorioAluguelArray {
 			if (this.listaAluguel.get(i).getId() == id) {
 				indice = i;
 			}
-			// tratar um exceção do tipo se a conta não foi encontrada
 		}
-		return indice; // Retorna -1 se não encontrou
+		return indice;
 	}
-
-
 
 	private int obterIndice(String cpf, long idBicicleta) {
 		int indice = -1;
@@ -178,11 +178,10 @@ public class RepositorioAluguelArray {
 							.getAlugou() == true) {
 				indice = i;
 			}
-			// tratar um exceção do tipo se a conta não foi encontrada
 		}
-		return indice; // Retorna -1 se não encontrou
+		return indice;
 	}
-	
+
 	// private int obterIndice(String cpf) {
 	// int indice = -1;
 	//

@@ -20,12 +20,11 @@ public class ControladorCliente {
 			ClienteJaCadastradoException, ClienteNaoCadastradoException {
 		boolean indice = this.existe(cliente.getCpf());
 
-		if (indice == false && cliente != null){
+		if (indice == false && cliente != null) {
 			cliente.setId(this.idCliente);
-		repositorio.cadastrarCliente(cliente);
-		this.idCliente++;
-		}
-		else
+			repositorio.cadastrarCliente(cliente);
+			this.idCliente++;
+		} else
 			throw new ClienteJaCadastradoException(cliente.getCpf());
 	}
 

@@ -127,24 +127,24 @@ public class RepositorioAdministradorArray {
 		this.gravarArquivo();
 	}
 
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf) throws AdministradorInexistenteException {
 		boolean existe = false;
 		int indice = this.obterIndice(cpf);
 
 		if (indice != -1)
 			return existe = true;
-		return existe;
+		else
+			throw new AdministradorInexistenteException(cpf);
 	}
 
-	public boolean excluirAdministrador(String cpf) throws RepositorioException {
+	public boolean excluirAdministrador(String cpf) throws RepositorioException, AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
-		// preicsa usar um try, catch, informando que o adm não existe
 		if (indice != -1) {
 			this.listaAdm.remove(indice);
 			this.gravarArquivo();
 			return true;
-		}
-		return false;
+		}else
+			throw new AdministradorInexistenteException(cpf);
 	}
 
 	private int obterIndice(String cpf) {

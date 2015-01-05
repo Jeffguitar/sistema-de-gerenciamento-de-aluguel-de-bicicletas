@@ -7,6 +7,8 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioAluguelArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelExistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.BicicletaIndisponivelException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaAlugouBicicletaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
@@ -18,7 +20,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 public class ControladorAluguel {
 	private RepositorioAluguelArray repositorio;
 	private ControladorCliente cliente;
-	
+
 	private ControladorEstacao estacao;
 	private long idAluguel = 1;
 
@@ -31,21 +33,57 @@ public class ControladorAluguel {
 
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
-			ClienteNaoCadastradoException, EstacaoNaoExisteException, BicicletaIndisponivelException, ClienteJaAlugouBicicletaException {
+			ClienteNaoCadastradoException, EstacaoNaoExisteException,
+			BicicletaIndisponivelException, ClienteJaAlugouBicicletaException {
 		if (this.cliente.existe(cpf)) { // 1 - Se cliente existe
 			if (this.estacao.existe(codigoEstacao)) { // 2 - Se a estação existe
 				int indiceBicicletaNoArray = this.estacao.procurar(
-						codigoEstacao).retornaIndiceBicicleta(codigoBicicleta); // 3 - indíce da bicicleta informada correspodente à lista de bicicletas da estação
+						codigoEstacao).retornaIndiceBicicleta(codigoBicicleta); // 3
+																				// -
+																				// indíce
+																				// da
+																				// bicicleta
+																				// informada
+																				// correspodente
+																				// à
+																				// lista
+																				// de
+																				// bicicletas
+																				// da
+																				// estação
 				if (this.estacao.procurar(codigoEstacao).getBicicleta()
-						.get(indiceBicicletaNoArray).getAlugou() == false) { //4 - Se a bicicleta está disponível
-					Cliente cliente = this.cliente.procurar(cpf); // 5 - Retorna o objeto do tipo cliente
-					Estacao estacao = this.estacao.procurar(codigoEstacao); // 6 - retora o objeto do tipo estaçao
+						.get(indiceBicicletaNoArray).getAlugou() == false) { // 4
+																				// -
+																				// Se
+																				// a
+																				// bicicleta
+																				// está
+																				// disponível
+					Cliente cliente = this.cliente.procurar(cpf); // 5 - Retorna
+																	// o objeto
+																	// do tipo
+																	// cliente
+					Estacao estacao = this.estacao.procurar(codigoEstacao); // 6
+																			// -
+																			// retora
+																			// o
+																			// objeto
+																			// do
+																			// tipo
+																			// estaçao
 					estacao.getBicicleta()
 							.get(estacao
 									.retornaIndiceBicicleta(codigoBicicleta))
-							.setAlugou(true); // 7 - Torna a bicicleta indisponível
+							.setAlugou(true); // 7 - Torna a bicicleta
+												// indisponível
 					Aluguel aluguel = new Aluguel(this.idAluguel, estacao,
-							cliente, Calendar.getInstance(Locale.getDefault())); // 8 - Monta o objeto persistente Aluguel
+							cliente, Calendar.getInstance(Locale.getDefault())); // 8
+																					// -
+																					// Monta
+																					// o
+																					// objeto
+																					// persistente
+																					// Aluguel
 					if (this.existe(
 							aluguel.getCliente().getCpf(),
 							aluguel.getEstacao()
@@ -53,7 +91,10 @@ public class ControladorAluguel {
 									.get(aluguel.getEstacao()
 											.retornaIndiceBicicleta(
 													codigoBicicleta))
-									.getCodigo()) == false) { // Aluga se o cliente não 'possui' uma bicicleta
+									.getCodigo()) == false) { // Aluga se o
+																// cliente não
+																// 'possui' uma
+																// bicicleta
 						this.cadastrar(aluguel);
 						this.idAluguel++;
 					} else {
@@ -72,9 +113,11 @@ public class ControladorAluguel {
 	}
 
 	public void devolverBicicleta(String cpf, long codigoEstacao,
-			long codigoBicicleta) throws RepositorioException, EstacaoNaoExisteException, ClienteNaoAlugouBicicletaException {
+			long codigoBicicleta) throws RepositorioException,
+			EstacaoNaoExisteException, ClienteNaoAlugouBicicletaException,
+			AluguelInexistenteException {
 		if (this.existe(cpf, codigoBicicleta)) { // tratar exceção do
-															// tipo
+													// tipo
 			// 'aluguelInexistenteException'
 			// (sugestão)
 			int indiceBicicletaNoArray = this.estacao.procurar(codigoEstacao)
@@ -98,7 +141,8 @@ public class ControladorAluguel {
 									.retornaIndiceBicicleta(codigoBicicleta))
 							.getCodigo());
 		} else {
-			throw new ClienteNaoAlugouBicicletaException(cpf, codigoEstacao, codigoBicicleta);
+			throw new ClienteNaoAlugouBicicletaException(cpf, codigoEstacao,
+					codigoBicicleta);
 		}
 	}
 
@@ -142,27 +186,33 @@ public class ControladorAluguel {
 	}
 
 	public void cadastrar(String cpf, long idBicicleta)
-			throws RepositorioException {
+			throws RepositorioException, AluguelInexistenteException,
+			AluguelExistenteException {
 		Aluguel aluguel = this.procurar(cpf, idBicicleta);
 
 		if (aluguel == null)
 			repositorio.cadastrarAluguel(aluguel);
+		else
+			throw new AluguelExistenteException("O aluguel ja existe!");
 	}
 
-	public Aluguel procurar(String cpf, long idBicicleta) {
+	public Aluguel procurar(String cpf, long idBicicleta)
+			throws AluguelInexistenteException {
 		return this.repositorio.procurarAluguel(cpf, idBicicleta);
 	}
 
-	public Aluguel procurar(long id) {
+	public Aluguel procurar(long id) throws AluguelInexistenteException {
 		return this.repositorio.procurarAluguel(id);
 	}
 
 	public void alterar(String cpf, long idBicicleta)
-			throws RepositorioException {
+			throws RepositorioException, AluguelInexistenteException {
 		Aluguel aluguel = this.procurar(cpf, idBicicleta);
 
 		if (aluguel != null)
 			this.repositorio.alterarAluguel(aluguel);
+		else
+			throw new AluguelInexistenteException("Aluguel não existe!");
 	}
 
 	public boolean existe(String cpf, long idBicicleta) {
@@ -170,7 +220,7 @@ public class ControladorAluguel {
 	}
 
 	public void excluir(String cpf, long idBicicleta)
-			throws RepositorioException {
+			throws RepositorioException, AluguelInexistenteException {
 		this.repositorio.excluirAluguel(cpf, idBicicleta);
 	}
 }
