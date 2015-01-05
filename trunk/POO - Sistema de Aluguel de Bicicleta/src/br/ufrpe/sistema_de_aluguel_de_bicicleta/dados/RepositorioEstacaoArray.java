@@ -125,13 +125,13 @@ public class RepositorioEstacaoArray {
 		this.gravarArquivo();
 	}
 
-	public boolean existe(long id) {
-		boolean existe = false;
+	public boolean existe(long id) throws EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
 
 		if (indice != -1)
-			return existe = true;
-		return existe;
+			return true;
+		else
+			throw new EstacaoNaoExisteException(id);
 	}
 
 	public boolean excluirEstacao(long id) throws RepositorioException,
@@ -143,7 +143,7 @@ public class RepositorioEstacaoArray {
 			return true;
 		} else
 
-			return false;
+			throw new EstacaoNaoExisteException(id);
 	}
 
 	private int obterIndice(long id) {

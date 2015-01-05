@@ -17,7 +17,8 @@ public class ControladorAdministrador {
 	}
 
 	public void cadastrar(Administrador adm) throws RepositorioException,
-			AdministradorJaExistenteException {
+			AdministradorJaExistenteException,
+			AdministradorInexistenteException {
 		boolean indice = this.existe(adm.getCpf());
 
 		if (indice == false && adm != null) {
@@ -41,11 +42,12 @@ public class ControladorAdministrador {
 			this.repositorio.alterarAdministrador(adm);
 	}
 
-	public boolean existe(String cpf) {
+	public boolean existe(String cpf) throws AdministradorInexistenteException {
 		return this.repositorio.existe(cpf);
 	}
 
-	public void excluir(String cpf) throws RepositorioException {
+	public void excluir(String cpf) throws RepositorioException,
+			AdministradorInexistenteException {
 		this.repositorio.excluirAdministrador(cpf);
 	}
 

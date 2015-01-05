@@ -16,7 +16,7 @@ public class ControladorEstacao {
 	}
 
 	public void cadastrar(Estacao estacao) throws RepositorioException,
-			EstacaoExistenteException {
+			EstacaoExistenteException, EstacaoNaoExisteException {
 		boolean resposta = this.existe(estacao.getCodigo());
 
 		if (resposta == false && estacao != null) {
@@ -39,7 +39,7 @@ public class ControladorEstacao {
 			this.repositorio.alterarEstacao(estacao);
 	}
 
-	public boolean existe(long id) {
+	public boolean existe(long id) throws EstacaoNaoExisteException {
 		return this.repositorio.existe(id);
 	}
 
