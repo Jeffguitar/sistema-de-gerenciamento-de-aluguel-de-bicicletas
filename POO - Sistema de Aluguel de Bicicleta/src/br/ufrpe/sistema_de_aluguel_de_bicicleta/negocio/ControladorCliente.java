@@ -1,9 +1,12 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
+import java.util.List;
+
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioClienteArray;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClientesInexistentesException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class ControladorCliente {
@@ -48,5 +51,12 @@ public class ControladorCliente {
 	public void excluir(String cpf) throws RepositorioException,
 			ClienteNaoCadastradoException {
 		this.repositorio.excluirCliente(cpf);
+	}
+
+	public List<Cliente> exibirClientes() throws ClientesInexistentesException {
+		if (this.repositorio.exibirClientes().size() > 0)
+			return this.repositorio.exibirClientes();
+		else
+			throw new ClientesInexistentesException();
 	}
 }

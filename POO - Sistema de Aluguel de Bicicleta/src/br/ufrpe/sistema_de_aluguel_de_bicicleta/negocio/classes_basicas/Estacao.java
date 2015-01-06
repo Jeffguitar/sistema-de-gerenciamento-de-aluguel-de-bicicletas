@@ -25,6 +25,10 @@ public class Estacao implements Serializable {
 		this.bicicleta = bicicleta;
 	}
 
+	public Estacao() {
+
+	}
+
 	public long getCodigo() {
 		return codigo;
 	}
@@ -48,8 +52,8 @@ public class Estacao implements Serializable {
 	public void setBicicleta(List<Bicicleta> bicicleta) {
 		this.bicicleta = bicicleta;
 	}
-	
-	public int retornaIndiceBicicleta (long codigoBicicleta){
+
+	public int retornaIndiceBicicleta(long codigoBicicleta) {
 		return this.bicicleta.indexOf(codigoBicicleta);
 	}
 

@@ -2,7 +2,7 @@ package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas;
 
 public enum SexoTipo {
 
-	M("Masculino"), F("Femininos");
+	M("Masculino"), F("Feminino");
 
 	private String descricao;
 
