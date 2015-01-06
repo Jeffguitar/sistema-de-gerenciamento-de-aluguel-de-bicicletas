@@ -149,6 +149,10 @@ public class RepositorioClienteArray {
 			throw new ClienteNaoCadastradoException(cpf);
 	}
 
+	public List<Cliente> exibirClientes(){
+		return this.listaCliente;
+	}
+	
 	private int obterIndice(String cpf) {
 		int indice = -1;
 

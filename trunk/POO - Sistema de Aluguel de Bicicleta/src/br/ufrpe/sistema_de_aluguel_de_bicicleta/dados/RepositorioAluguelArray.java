@@ -153,6 +153,36 @@ public class RepositorioAluguelArray {
 			throw new AluguelInexistenteException("Aluguel não existe!");
 	}
 
+	public List<Aluguel> exibirALuguelAtivo() {
+		List<Aluguel> aluguelAtivo = new ArrayList<Aluguel>();
+		for (int i = 0; i < listaAluguel.size(); i++) {
+			if (listaAluguel.get(i).getDataDevolucao() == null) {
+				aluguelAtivo.add(listaAluguel.get(i));
+			}
+		}
+		return aluguelAtivo;
+	}
+
+	public List<Aluguel> exibirALuguelFinalizadoEstacao() {
+		List<Aluguel> aluguelFinalizado = new ArrayList<Aluguel>();
+		for (int i = 0; i < listaAluguel.size(); i++) {
+			if (listaAluguel.get(i).getDataDevolucao() != null) {
+				aluguelFinalizado.add(listaAluguel.get(i));
+			}
+		}
+		return aluguelFinalizado;
+	}
+
+	public List<Aluguel> exibirALuguelComMulta() {
+		List<Aluguel> aluguelFinalizado = new ArrayList<Aluguel>();
+		for (int i = 0; i < listaAluguel.size(); i++) {
+			if (listaAluguel.get(i).getValor() > 0.0) {
+				aluguelFinalizado.add(listaAluguel.get(i));
+			}
+		}
+		return aluguelFinalizado;
+	}
+
 	private int obterIndice(long id) {
 		int indice = -1;
 

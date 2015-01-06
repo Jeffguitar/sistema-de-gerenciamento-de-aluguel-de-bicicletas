@@ -128,22 +128,22 @@ public class RepositorioAdministradorArray {
 	}
 
 	public boolean existe(String cpf) throws AdministradorInexistenteException {
-		boolean existe = false;
 		int indice = this.obterIndice(cpf);
 
 		if (indice != -1)
-			return existe = true;
+			return true;
 		else
 			throw new AdministradorInexistenteException(cpf);
 	}
 
-	public boolean excluirAdministrador(String cpf) throws RepositorioException, AdministradorInexistenteException {
+	public boolean excluirAdministrador(String cpf)
+			throws RepositorioException, AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
 		if (indice != -1) {
 			this.listaAdm.remove(indice);
 			this.gravarArquivo();
 			return true;
-		}else
+		} else
 			throw new AdministradorInexistenteException(cpf);
 	}
 
