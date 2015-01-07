@@ -1,6 +1,10 @@
 package br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.dados.RepositorioEstacaoArray;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Bicicleta;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
@@ -15,12 +19,17 @@ public class ControladorEstacao {
 		this.repositorio = RepositorioEstacaoArray.getInstance();
 	}
 
-	public void cadastrar(Estacao estacao) throws RepositorioException,
+	public void cadastrar(Estacao estacao, int quantidadeBicicletas) throws RepositorioException,
 			EstacaoExistenteException, EstacaoNaoExisteException {
+		estacao.setCodigo(this.idEstacao);
 		boolean resposta = this.existe(estacao.getCodigo());
 
 		if (resposta == false && estacao != null) {
-			estacao.setCodigo(this.idEstacao);
+			List<Bicicleta> listaBicicleta = new ArrayList<Bicicleta>();
+			for (int i = 0; i < quantidadeBicicletas; i++) {
+				listaBicicleta.add(i, new Bicicleta(i+1, false));						
+			}
+			estacao.setBicicleta(listaBicicleta);
 			repositorio.cadastrarEstacao(estacao);
 			this.idEstacao++;
 		} else

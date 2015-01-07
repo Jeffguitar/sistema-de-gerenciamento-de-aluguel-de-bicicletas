@@ -117,6 +117,16 @@ public class RepositorioAluguelArray {
 			throw new AluguelInexistenteException("Aluguel Inexistente!");
 
 	}
+	
+	public Aluguel procurarAluguelFinalizado(String cpf, long idBicicleta)
+			throws AluguelInexistenteException {
+		int indice = this.obterIndiceAluguelFinalizado(cpf, idBicicleta);
+		if (indice != -1)
+			return this.listaAluguel.get(indice);
+		else
+			throw new AluguelInexistenteException("Aluguel Inexistente!");
+
+	}
 
 	public Aluguel procurarAluguel(long id) throws AluguelInexistenteException {
 		int indice = this.obterIndice(id);
@@ -212,6 +222,24 @@ public class RepositorioAluguelArray {
 		return indice;
 	}
 
+	private int obterIndiceAluguelFinalizado(String cpf, long idBicicleta) {
+		int indice = -1;
+
+		for (int i = 0; i < this.listaAluguel.size(); i++) {
+			if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)
+					&& this.listaAluguel
+							.get(i)
+							.getEstacao()
+							.getBicicleta()
+							.get(this.listaAluguel.get(i).getEstacao()
+									.retornaIndiceBicicleta(idBicicleta))
+							.getAlugou() == false && listaAluguel.get(i).getDataDevolucao() != null) {
+				indice = i;
+			}
+		}
+		return indice;
+	}
+	
 	// private int obterIndice(String cpf) {
 	// int indice = -1;
 	//

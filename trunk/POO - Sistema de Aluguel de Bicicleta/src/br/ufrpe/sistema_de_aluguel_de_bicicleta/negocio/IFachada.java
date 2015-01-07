@@ -21,6 +21,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadast
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClientesInexistentesException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.IdIncorreto;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public interface IFachada {
@@ -28,7 +29,8 @@ public interface IFachada {
 	public void alugarBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
 			ClienteNaoCadastradoException, EstacaoNaoExisteException,
-			BicicletaIndisponivelException, ClienteJaAlugouBicicletaException;
+			BicicletaIndisponivelException, ClienteJaAlugouBicicletaException,
+			IdIncorreto, AluguelInexistenteException;
 
 	public void devolverBicicleta(String cpf, long codigoEstacao,
 			long codigoBicicleta) throws RepositorioException,
@@ -61,9 +63,13 @@ public interface IFachada {
 			throws RepositorioException, AluguelInexistenteException,
 			AluguelExistenteException;
 
-	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException;
+	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException,
+			AluguelInexistenteException;
 
 	public Aluguel procurarAluguel(String cpf, long idBicicleta)
+			throws AluguelInexistenteException;
+
+	public Aluguel procurarAluguelFinalizado(String cpf, long idBicicleta)
 			throws AluguelInexistenteException;
 
 	public Aluguel procurarAluguel(long id) throws AluguelInexistenteException;
@@ -105,13 +111,14 @@ public interface IFachada {
 			ClienteNaoCadastradoException;
 
 	public List<Cliente> exibirClientes() throws ClientesInexistentesException;
-	
+
 	// Fim Cliente
 
 	// Início Estação
 
-	public void cadastrarEstacao(Estacao estacao) throws RepositorioException,
-			EstacaoExistenteException, EstacaoNaoExisteException;
+	public void cadastrarEstacao(Estacao estacao, int totalBicicletas)
+			throws RepositorioException, EstacaoExistenteException,
+			EstacaoNaoExisteException;
 
 	public Estacao procurarEstacao(long id) throws EstacaoNaoExisteException;
 

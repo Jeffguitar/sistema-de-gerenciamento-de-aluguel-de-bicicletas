@@ -124,7 +124,7 @@ public class Principal {
 				System.out.print("Opção: ");
 				opcao = read.nextInt();
 
-				verificarOpcao(opcao, 0, 6);
+				verificarOpcao(opcao, 0, 7);
 
 				switch (opcao) {
 				case 1:
@@ -169,6 +169,7 @@ public class Principal {
 				do {
 					System.out.println("\nCadastrar cliente (Sair = 0):");
 					System.out.print("Informe o nome: ");
+					read.nextLine();
 					String nome = read.nextLine();
 					if (nome != null) {
 						letrasIniciaisMaiusculas(nome);
@@ -192,7 +193,7 @@ public class Principal {
 
 				do {
 					System.out.print("Informe o RG: ");
-					String identidade = read.next();
+					String identidade = read.nextLine();
 					if (identidade != null) {
 
 						if (identidade.equalsIgnoreCase("0"))
@@ -206,7 +207,7 @@ public class Principal {
 
 				do {
 					System.out.print("Informe o sexo: ");
-					String sexo = read.next();
+					String sexo = read.nextLine();
 					if (sexo != null) {
 						if (sexo.equals(SexoTipo.F.getDescricao()))
 							cliente.setSexo(SexoTipo.F);
@@ -223,7 +224,7 @@ public class Principal {
 
 				do {
 					System.out.print("Informe o telefone: ");
-					String telefone = read.next();
+					String telefone = read.nextLine();
 					if (telefone != null) {
 						if (telefone.equalsIgnoreCase("0"))
 							return;
@@ -236,7 +237,7 @@ public class Principal {
 
 				do {
 					System.out.print("Informe o e-mail: ");
-					String email = read.next();
+					String email = read.nextLine();
 					if (email != null) {
 						if (email.equalsIgnoreCase("0")
 								&& !isEmailValido(email))
@@ -250,7 +251,7 @@ public class Principal {
 						throw new EmailException();
 				} while (true);
 
-				System.out.println("Endereço:");
+				System.out.println("Endereço");
 				Endereco endereco = new Endereco();
 
 				do {
@@ -267,7 +268,7 @@ public class Principal {
 
 				do {
 					System.out.print("Informe o CEP: ");
-					String cep = read.next();
+					String cep = read.nextLine();
 					if (cep != null) {
 						if (cep.equalsIgnoreCase("0"))
 							return;
@@ -276,37 +277,6 @@ public class Principal {
 					} else
 						throw new CepException();
 				} while (true);
-
-				// do {
-				// try {
-				// System.out.print("Informe o número: ");
-				// String numero = read.next();
-				//
-				// if (numero.equalsIgnoreCase("0"))
-				// return;
-				//
-				// endereco.setNumero(numero);
-				// break;
-				// } catch (NumeroEnderecoException e) {
-				// System.err.println(e);
-				// }
-				// } while (true);
-
-				// do {
-				// try {
-				// System.out.print("Informe o complemento: ");
-				// read.nextLine();
-				// String complemento = read.nextLine();
-				//
-				// if (complemento.equalsIgnoreCase("0"))
-				// return;
-				//
-				// endereco.setComplemento(complemento);
-				// break;
-				// } catch (ComplementoEnderecoException e) {
-				// System.err.println(e);
-				// }
-				// } while (true);
 
 				do {
 					System.out.print("Informe o bairro: ");
@@ -580,21 +550,34 @@ public class Principal {
 				System.out.print("Informe o CPF: ");
 				String cpf = read.next();
 				if (cpf != null) {
+					if (cpf.equalsIgnoreCase("0"))
+						return;
 					if (fachada.existeCliente(cpf)) {
-						if (!validaCpf(cpf)) {
-							if (cpf.equalsIgnoreCase("0"))
-								return;
 
-							Cliente cliente = fachada.procurarCliente(cpf);
+						Cliente cliente = fachada.procurarCliente(cpf);
 
-							if (cliente == null)
-								throw new ClienteNaoCadastradoException(cpf);
+						if (cliente == null)
+							throw new ClienteNaoCadastradoException(cpf);
 
-							System.out.println("\nDados cadastrais:");
-							System.out.println(cliente);
-							System.out.println();
-						} else
-							throw new CpfInvalidoException();
+						System.out.println("\n-----Dados cadastrais-----");
+						System.out.println();
+						System.out.println("Usuário: " + cliente.getNome());
+						System.out.println();
+						System.out.println("CPF: " + cliente.getCpf());
+						System.out.println();
+						System.out.println("Sexo: "
+								+ cliente.getSexo().getDescricao());
+						System.out.println();
+						System.out.println("Endereço: "
+								+ cliente.getEndereco().getEndereco() + " - "
+								+ cliente.getEndereco().getBairro() + " - "
+								+ cliente.getEndereco().getCidade());
+						System.out.println();
+						System.out.println("Contato: "
+								+ cliente.getContato().getTelefone() + " - "
+								+ "Email: " + cliente.getContato().getEmail());
+						System.out.println();
+						System.out.println("____________________");
 					} else
 						throw new ClienteNaoCadastradoException(cpf);
 				} else
@@ -612,48 +595,42 @@ public class Principal {
 			try {
 				System.out.print("\nInforme o CPF: ");
 				String cpf = read.next();
-
+				if (cpf.equalsIgnoreCase("0"))
+					return;
 				if (fachada.existeCliente(cpf)) {
-					if (!validaCpf(cpf)) {
-
-						if (cpf.equalsIgnoreCase("0"))
-							return;
-
-						Cliente cliente = fachada.procurarCliente(cpf);
-						if (cliente != null) {
-							System.out.println();
-							System.out.println(cliente);
-							String resposta;
-							do {
-								try {
+					Cliente cliente = fachada.procurarCliente(cpf);
+					if (cliente != null) {
+						System.out.println();
+						System.out.println(cliente.getNome());
+						String resposta;
+						do {
+							try {
+								System.out
+										.println("\nDeseja realmente remover o cadastro desse cliente? (S/N)");
+								System.out.print("Opção: ");
+								resposta = read.next();
+								if (!resposta.equalsIgnoreCase("s")
+										&& !resposta.equalsIgnoreCase("n"))
+									throw new OpcaoInvalidaException();
+								else if (resposta.equalsIgnoreCase("s")) {
+									fachada.excluirCliente(cpf);
 									System.out
-											.println("\nDeseja realmente remover o cadastro desse cliente? (S/N)");
-									System.out.print("Opção: ");
-									resposta = read.next();
-									if (!resposta.equalsIgnoreCase("s")
-											&& !resposta.equalsIgnoreCase("n"))
-										throw new OpcaoInvalidaException();
-									else if (resposta.equalsIgnoreCase("s")) {
-										fachada.excluirCliente(cpf);
-										System.out
-												.println("\nCadastro de cliente removido com sucesso!");
-										break;
-									} else {
-										System.out
-												.println("\nRemoção de cadastro de cliente cancelada!");
-										break;
-									}
-								} catch (OpcaoInvalidaException e) {
-									System.err.println(e);
+											.println("\nCadastro de cliente removido com sucesso!");
+									break;
+								} else {
+									System.out
+											.println("\nRemoção de cadastro de cliente cancelada!");
+									break;
 								}
-							} while (true);
-						}
-					} else
-						throw new CpfInvalidoException();
+							} catch (OpcaoInvalidaException e) {
+								System.err.println(e);
+							}
+						} while (true);
+					}
+
 				} else
 					throw new ClienteNaoCadastradoException(cpf);
-			} catch (ClienteNaoCadastradoException | RepositorioException
-					| CpfInvalidoException e) {
+			} catch (ClienteNaoCadastradoException | RepositorioException e) {
 				System.err.println(e);
 			}
 		} while (true);
@@ -667,59 +644,53 @@ public class Principal {
 				System.out.print("\nInforme o CPF: ");
 				String cpf = read.next();
 				if (cpf != null) {
-					System.out.print("\nInforme o código da estação: ");
-					Long codEstacao = read.nextLong();
-					System.out.print("\nInforme o código da bicicleta: ");
-					Long codBicicleta = read.nextLong();
-					if (codBicicleta <= 0 || codEstacao <= 0) {
+					if (cpf.equalsIgnoreCase("0"))
+						return;
+					if (fachada.existeCliente(cpf)) {
+						System.out.print("\nInforme o código da estação: ");
+						Long codEstacao = read.nextLong();
+						System.out.print("\nInforme o código da bicicleta: ");
+						Long codBicicleta = read.nextLong();
+						if (codBicicleta > 0 || codEstacao > 0) {
+							String resposta;
+							do {
+								try {
+									System.out
+											.println("\nDeseja confirmar o aluguel? (S/N)");
+									System.out.print("Opção: ");
+									resposta = read.next();
+									if (!resposta.equalsIgnoreCase("s")
+											&& !resposta.equalsIgnoreCase("n"))
+										throw new OpcaoInvalidaException();
+									else if (resposta.equalsIgnoreCase("s")) {
+										fachada.alugarBicicleta(cpf,
+												codEstacao, codBicicleta);
 
-						if (fachada.existeCliente(cpf)) {
-							if (validaCpf(cpf)) {
-								if (cpf.equalsIgnoreCase("0"))
-									return;
-								String resposta;
-								do {
-									try {
 										System.out
-												.println("\nDeseja confirmar o aluguel? (S/N)");
-										System.out.print("Opção: ");
-										resposta = read.next();
-										if (!resposta.equalsIgnoreCase("s")
-												&& !resposta
-														.equalsIgnoreCase("n"))
-											throw new OpcaoInvalidaException();
-										else if (resposta.equalsIgnoreCase("s")) {
-											fachada.alugarBicicleta(cpf,
-													codEstacao, codBicicleta);
-
-											System.out
-													.println("\nAluguel confirmado!");
-											break;
-										} else {
-											System.out
-													.println("\nAluguel não realizado!");
-											break;
-										}
-									} catch (OpcaoInvalidaException
-											| EstacaoNaoExisteException
-											| BicicletaIndisponivelException
-											| ClienteJaAlugouBicicletaException e) {
-										System.err.println(e);
+												.println("\nAluguel confirmado!");
+										break;
+									} else {
+										System.out
+												.println("\nAluguel não realizado!");
+										break;
 									}
-								} while (true);
-
-							} else
-								throw new CpfInvalidoException();
+								} catch (OpcaoInvalidaException
+										| EstacaoNaoExisteException
+										| BicicletaIndisponivelException
+										| ClienteJaAlugouBicicletaException
+										| AluguelInexistenteException e) {
+									System.err.println(e);
+								}
+							} while (true);
 						} else
-							throw new ClienteNaoCadastradoException(cpf);
-
+							throw new IdIncorreto();
 					} else
-						throw new IdIncorreto();
+						throw new ClienteNaoCadastradoException(cpf);
 				} else
-					throw new ClienteNaoCadastradoException(cpf);
+					throw new CpfInvalidoException();
 
 			} catch (ClienteNaoCadastradoException | RepositorioException
-					| CpfInvalidoException | IdIncorreto e) {
+					| IdIncorreto | CpfInvalidoException e) {
 				System.err.println(e);
 			}
 
@@ -734,73 +705,66 @@ public class Principal {
 				System.out.print("\nInforme o CPF: ");
 				String cpf = read.next();
 				if (cpf != null) {
-					System.out.print("\nInforme o código da estação: ");
-					Long codEstacao = read.nextLong();
-					System.out.print("\nInforme o código da bicicleta: ");
-					Long codBicicleta = read.nextLong();
-					if (codBicicleta <= 0 || codEstacao <= 0) {
-						if (fachada.existeCliente(cpf)) {
-							if (validaCpf(cpf)) {
-								if (cpf.equalsIgnoreCase("0"))
-									return;
-
-								String resposta;
-								String resp;
-								do {
-									try {
-										System.out
-												.println("\nDeseja confirmar a devolução? (S/N)");
-										System.out.print("Opção: ");
-										resposta = read.next();
-										if (!resposta.equalsIgnoreCase("s")
-												&& !resposta
-														.equalsIgnoreCase("n"))
-											throw new OpcaoInvalidaException();
-										else if (resposta.equalsIgnoreCase("s")) {
-											fachada.devolverBicicleta(cpf,
-													codEstacao, codBicicleta);
-											do {
+					if (cpf.equalsIgnoreCase("0"))
+						return;
+					if (fachada.existeCliente(cpf)) {
+						System.out.print("\nInforme o código da estação: ");
+						Long codEstacao = read.nextLong();
+						System.out.print("\nInforme o código da bicicleta: ");
+						Long codBicicleta = read.nextLong();
+						if (codBicicleta > 0 || codEstacao > 0) {
+							String resposta;
+							String resp;
+							do {
+								try {
+									System.out
+											.println("\nDeseja confirmar a devolução? (S/N)");
+									System.out.print("Opção: ");
+									resposta = read.next();
+									if (!resposta.equalsIgnoreCase("s")
+											&& !resposta.equalsIgnoreCase("n"))
+										throw new OpcaoInvalidaException();
+									else if (resposta.equalsIgnoreCase("s")) {
+										fachada.devolverBicicleta(cpf,
+												codEstacao, codBicicleta);
+										do {
+											System.out
+													.println("Deseja imprimir um recibo? (S/N)");
+											System.out.print("Opção: ");
+											resp = read.next();
+											if (!resp.equalsIgnoreCase("s")
+													&& !resp.equalsIgnoreCase("n"))
+												throw new OpcaoInvalidaException();
+											else if (resp.equalsIgnoreCase("s")) {
+												emitirReciboMenu();
+											} else {
 												System.out
-														.println("Deseja imprimir um recibo? (S/N)");
-												System.out.print("Opção: ");
-												resp = read.next();
-												if (!resp.equalsIgnoreCase("s")
-														&& !resp.equalsIgnoreCase("n"))
-													throw new OpcaoInvalidaException();
-												else if (resp
-														.equalsIgnoreCase("s")) {
-													emitirReciboMenu();
-												} else {
-													System.out
-															.println("\nRecibo não emitido!");
-													break;
-												}
+														.println("\nRecibo não emitido!");
+												break;
+											}
 
-											} while (true);
+										} while (true);
 
-											System.out
-													.println("\nDevolução confirmada!");
-											break;
-										} else {
-											System.out
-													.println("\nDevolução não realizada!");
-											break;
-										}
-									} catch (
-											OpcaoInvalidaException
-											| EstacaoNaoExisteException
-											| ClienteNaoAlugouBicicletaException
-											| AluguelInexistenteException e) {
-										System.err.println(e);
+										System.out
+												.println("\nDevolução confirmada!");
+										break;
+									} else {
+										System.out
+												.println("\nDevolução não realizada!");
+										break;
 									}
-								} while (true);
+								} catch (OpcaoInvalidaException
+										| EstacaoNaoExisteException
+										| ClienteNaoAlugouBicicletaException
+										| AluguelInexistenteException e) {
+									System.err.println(e);
+								}
+							} while (true);
 
-							} else
-								throw new CpfInvalidoException();
 						} else
-							throw new ClienteNaoCadastradoException(cpf);
+							throw new IdIncorreto();
 					} else
-						throw new IdIncorreto();
+						throw new ClienteNaoCadastradoException(cpf);
 				} else
 					throw new CpfInvalidoException();
 			} catch (ClienteNaoCadastradoException | RepositorioException
@@ -817,42 +781,41 @@ public class Principal {
 			System.out.print("Informe o CPF: ");
 			String cpf = read.next();
 			if (cpf != null) {
-				System.out.print("Informe o ID da bicicleta: ");
-				Long id = read.nextLong();
-				if (id > 0) {
-					if (fachada.existeCliente(cpf)) {
-						if (!validaCpf(cpf)) {
-							Format formato = new SimpleDateFormat(
-									"dd/MM/yyyy - HH:mm:ss");
-							Aluguel aluguel = fachada.procurarAluguel(cpf, id);
-							System.out
-									.println("Recibo - Exibição dos dados do aluguel");
-							System.out.println();
-							System.out.println("Usuário: "
-									+ aluguel.getCliente().getNome());
-							System.out.println();
-							System.out.println("Estação: "
-									+ aluguel.getEstacao().getCodigo() + ". "
-									+ "Descrição: "
-									+ aluguel.getEstacao().getDescricao());
-							System.out.println();
-							System.out.println("Data do aluguel: "
-									+ formato.format(aluguel.getDataAluguel()
-											.getTime()));
-							System.out.println();
-							System.out.println("Data da devolução: "
-									+ formato.format(aluguel.getDataDevolucao()
-											.getTime()));
-							System.out.println();
-							System.out.println("Valor pago: "
-									+ aluguel.getValor());
-							System.out.println();
-						} else
-							throw new CpfInvalidoException();
+				if (fachada.existeCliente(cpf)) {
+					System.out.print("Informe o ID da bicicleta: ");
+					Long id = read.nextLong();
+					if (id > 0) {
+
+						Format formato = new SimpleDateFormat(
+								"dd/MM/yyyy - HH:mm:ss");
+						Aluguel aluguel = fachada.procurarAluguelFinalizado(
+								cpf, id);
+						System.out
+								.println("Recibo - Exibição dos dados do aluguel");
+						System.out.println();
+						System.out.println("Usuário: "
+								+ aluguel.getCliente().getNome());
+						System.out.println();
+						System.out.println("Estação: "
+								+ aluguel.getEstacao().getCodigo() + ". "
+								+ "Descrição: "
+								+ aluguel.getEstacao().getDescricao());
+						System.out.println();
+						System.out.println("Data do aluguel: "
+								+ formato.format(aluguel.getDataAluguel()
+										.getTime()));
+						System.out.println();
+						System.out.println("Data da devolução: "
+								+ formato.format(aluguel.getDataDevolucao()
+										.getTime()));
+						System.out.println();
+						System.out.println("Valor pago: " + aluguel.getValor()
+								+ " Reais.");
+						System.out.println();
 					} else
-						throw new ClienteNaoCadastradoException(cpf);
+						throw new IdIncorreto();
 				} else
-					throw new IdIncorreto();
+					throw new ClienteNaoCadastradoException(cpf);
 			} else
 				throw new CpfInvalidoException();
 		} catch (CpfInvalidoException | ClienteNaoCadastradoException
@@ -1103,7 +1066,6 @@ public class Principal {
 	private static void cadastrarEstacaoMenu() {
 
 		Estacao estacao = new Estacao();
-		Bicicleta bicicleta = new Bicicleta();
 		List<Bicicleta> listaBicicleta = new ArrayList<Bicicleta>();
 
 		try {
@@ -1118,18 +1080,19 @@ public class Principal {
 						.println("Informe a quantidade de bicicletas que a estação possuirá:");
 				int totalBicicletas = read.nextInt();
 				if (totalBicicletas > 0) {
-					for (long i = 0; i < totalBicicletas; i++) {
-						bicicleta.setCodigo(i + 1);
-						bicicleta.setAlugou(false);
-						listaBicicleta.add(bicicleta);
-					}
-					System.out.println("Informe uma descrição para a estação.");
-					String descricaoEstacao = read.next();
+					// for (int i = 0; i < totalBicicletas; i++) {
+					// listaBicicleta.add(i, bicicleta);
+					// listaBicicleta.get(i).setCodigo(i+1);
+					// listaBicicleta.get(i).setAlugou(false);
+					// }
+					System.out.println("Informe uma descrição para a estação:");
+					read.nextLine();
+					String descricaoEstacao = read.nextLine();
 					if (descricaoEstacao != null) {
 						System.out.println();
 						estacao.setDescricao(descricaoEstacao);
 						estacao.setBicicleta(listaBicicleta);
-						fachada.cadastrarEstacao(estacao);
+						fachada.cadastrarEstacao(estacao, totalBicicletas);
 						break;
 					} else
 						throw new DescricaoInvalidaException();

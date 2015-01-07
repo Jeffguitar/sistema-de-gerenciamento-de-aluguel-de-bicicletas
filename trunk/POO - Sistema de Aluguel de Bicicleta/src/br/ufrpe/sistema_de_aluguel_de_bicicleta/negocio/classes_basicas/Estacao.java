@@ -54,7 +54,12 @@ public class Estacao implements Serializable {
 	}
 
 	public int retornaIndiceBicicleta(long codigoBicicleta) {
-		return this.bicicleta.indexOf(codigoBicicleta);
+		int indice = -1;
+		for (int i = 0; i < this.bicicleta.size(); i++) {
+			if (this.bicicleta.get(i).getCodigo() == codigoBicicleta)
+				indice = i;
+		}
+		return indice;
 	}
 
 }
