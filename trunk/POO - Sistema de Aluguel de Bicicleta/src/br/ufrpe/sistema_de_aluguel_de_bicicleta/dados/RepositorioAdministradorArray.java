@@ -14,13 +14,13 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administ
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
-public class RepositorioAdministradorArray {
+public class RepositorioAdministradorArray implements
+		IRepositorioAdministradorArray {
 	private List<Administrador> listaAdm;
-	private static RepositorioAdministradorArray repositorio;
 	private final String ARQUIVO = "adms.dat";
 	private File arquivoAdm;
 
-	private RepositorioAdministradorArray() throws RepositorioException,
+	public RepositorioAdministradorArray() throws RepositorioException,
 			ClassNotFoundException {
 		try {
 			this.listaAdm = new ArrayList<Administrador>();
@@ -33,14 +33,6 @@ public class RepositorioAdministradorArray {
 			throw new RepositorioException("Erro na abertura do arquivo "
 					+ this.ARQUIVO + ".");
 		}
-	}
-
-	public static RepositorioAdministradorArray getInstance()
-			throws ClassNotFoundException, RepositorioException {
-		if (repositorio == null) {
-			repositorio = new RepositorioAdministradorArray();
-		}
-		return repositorio;
 	}
 
 	private void lerArquivo() throws RepositorioException,
@@ -104,12 +96,14 @@ public class RepositorioAdministradorArray {
 		}
 	}
 
+	@Override
 	public void cadastrarAdministrador(Administrador adm)
 			throws RepositorioException {
 		this.listaAdm.add(adm);
 		this.gravarArquivo();
 	}
 
+	@Override
 	public Administrador procurarAdministrador(String cpf)
 			throws AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
@@ -118,6 +112,7 @@ public class RepositorioAdministradorArray {
 		return this.listaAdm.get(indice);
 	}
 
+	@Override
 	public void alterarAdministrador(Administrador adm)
 			throws RepositorioException, AdministradorInexistenteException {
 		int indice = this.obterIndice(adm.getCpf());
@@ -127,6 +122,7 @@ public class RepositorioAdministradorArray {
 		this.gravarArquivo();
 	}
 
+	@Override
 	public boolean existe(String cpf) throws AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
 
@@ -136,13 +132,13 @@ public class RepositorioAdministradorArray {
 			return false;
 	}
 
-	public boolean excluirAdministrador(String cpf)
-			throws RepositorioException, AdministradorInexistenteException {
+	@Override
+	public void excluirAdministrador(String cpf) throws RepositorioException,
+			AdministradorInexistenteException {
 		int indice = this.obterIndice(cpf);
 		if (indice != -1) {
 			this.listaAdm.remove(indice);
 			this.gravarArquivo();
-			return true;
 		} else
 			throw new AdministradorInexistenteException(cpf);
 	}

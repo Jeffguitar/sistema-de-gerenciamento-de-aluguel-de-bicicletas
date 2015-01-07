@@ -12,26 +12,27 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 
 public class ControladorEstacao {
 	private RepositorioEstacaoArray repositorio;
-	private long idEstacao = 1;
+	private static long idEstacao = 1;
 
 	public ControladorEstacao() throws ClassNotFoundException,
 			RepositorioException {
-		this.repositorio = RepositorioEstacaoArray.getInstance();
+		this.repositorio = new RepositorioEstacaoArray();
 	}
 
-	public void cadastrar(Estacao estacao, int quantidadeBicicletas) throws RepositorioException,
-			EstacaoExistenteException, EstacaoNaoExisteException {
-		estacao.setCodigo(this.idEstacao);
+	public void cadastrar(Estacao estacao, int quantidadeBicicletas)
+			throws RepositorioException, EstacaoExistenteException,
+			EstacaoNaoExisteException {
+		estacao.setCodigo(ControladorEstacao.idEstacao);
 		boolean resposta = this.existe(estacao.getCodigo());
 
 		if (resposta == false && estacao != null) {
 			List<Bicicleta> listaBicicleta = new ArrayList<Bicicleta>();
 			for (int i = 0; i < quantidadeBicicletas; i++) {
-				listaBicicleta.add(i, new Bicicleta(i+1, false));						
+				listaBicicleta.add(i, new Bicicleta(i + 1, false));
 			}
 			estacao.setBicicleta(listaBicicleta);
 			repositorio.cadastrarEstacao(estacao);
-			this.idEstacao++;
+			ControladorEstacao.idEstacao++;
 		} else
 			throw new EstacaoExistenteException("A Estação já existe!");
 	}

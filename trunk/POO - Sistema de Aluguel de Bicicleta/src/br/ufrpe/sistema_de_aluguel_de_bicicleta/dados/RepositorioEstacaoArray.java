@@ -14,14 +14,13 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
-public class RepositorioEstacaoArray {
+public class RepositorioEstacaoArray implements IRepositorioEstacaoArray {
 
 	private List<Estacao> listaEstacao;
-	private static RepositorioEstacaoArray repositorio;
 	private final String ARQUIVO = "estacao.dat";
 	private File arquivoEstacao;
 
-	private RepositorioEstacaoArray() throws ClassNotFoundException,
+	public RepositorioEstacaoArray() throws ClassNotFoundException,
 			RepositorioException {
 		try {
 			this.listaEstacao = new ArrayList<Estacao>();
@@ -34,14 +33,6 @@ public class RepositorioEstacaoArray {
 			throw new RepositorioException("Erro na abertura do arquivo "
 					+ this.ARQUIVO + ".");
 		}
-	}
-
-	public static RepositorioEstacaoArray getInstance()
-			throws ClassNotFoundException, RepositorioException {
-		if (repositorio == null) {
-			repositorio = new RepositorioEstacaoArray();
-		}
-		return repositorio;
 	}
 
 	private void lerArquivo() throws RepositorioException,
@@ -104,11 +95,13 @@ public class RepositorioEstacaoArray {
 		}
 	}
 
+	@Override
 	public void cadastrarEstacao(Estacao estacao) throws RepositorioException {
 		this.listaEstacao.add(estacao);
 		this.gravarArquivo();
 	}
 
+	@Override
 	public Estacao procurarEstacao(long id) throws EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
 		if (indice == -1)
@@ -116,6 +109,7 @@ public class RepositorioEstacaoArray {
 		return this.listaEstacao.get(indice);
 	}
 
+	@Override
 	public void alterarEstacao(Estacao estacao) throws RepositorioException,
 			EstacaoNaoExisteException {
 		int indice = this.obterIndice(estacao.getCodigo());
@@ -125,6 +119,7 @@ public class RepositorioEstacaoArray {
 		this.gravarArquivo();
 	}
 
+	@Override
 	public boolean existe(long id) throws EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
 
@@ -134,6 +129,7 @@ public class RepositorioEstacaoArray {
 			return false;
 	}
 
+	@Override
 	public boolean excluirEstacao(long id) throws RepositorioException,
 			EstacaoNaoExisteException {
 		int indice = this.obterIndice(id);
@@ -157,5 +153,4 @@ public class RepositorioEstacaoArray {
 		}
 		return indice; // Retorna -1 se não encontrou
 	}
-
 }

@@ -14,13 +14,12 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
-public class RepositorioAluguelArray {
+public class RepositorioAluguelArray implements IRepositorioAluguelArray {
 	private List<Aluguel> listaAluguel;
-	private static RepositorioAluguelArray repositorio;
 	private final String ARQUIVO = "aluguel.dat";
 	private File arquivoAluguel;
 
-	private RepositorioAluguelArray() throws ClassNotFoundException,
+	public RepositorioAluguelArray() throws ClassNotFoundException,
 			RepositorioException {
 		try {
 			this.listaAluguel = new ArrayList<Aluguel>();
@@ -33,14 +32,6 @@ public class RepositorioAluguelArray {
 			throw new RepositorioException("Erro na abertura do arquivo "
 					+ this.ARQUIVO + ".");
 		}
-	}
-
-	public static RepositorioAluguelArray getInstance()
-			throws ClassNotFoundException, RepositorioException {
-		if (repositorio == null) {
-			repositorio = new RepositorioAluguelArray();
-		}
-		return repositorio;
 	}
 
 	private void lerArquivo() throws RepositorioException,
@@ -103,21 +94,24 @@ public class RepositorioAluguelArray {
 		}
 	}
 
+	@Override
 	public void cadastrarAluguel(Aluguel aluguel) throws RepositorioException {
 		this.listaAluguel.add(aluguel);
 		this.gravarArquivo();
 	}
 
+	@Override
 	public Aluguel procurarAluguel(String cpf, long idBicicleta)
 			throws AluguelInexistenteException {
 		int indice = this.obterIndice(cpf, idBicicleta);
 		if (indice != -1)
 			return this.listaAluguel.get(indice);
 		else
-			throw new AluguelInexistenteException("Aluguel Inexistente!");
+			return null;
 
 	}
-	
+
+	@Override
 	public Aluguel procurarAluguelFinalizado(String cpf, long idBicicleta)
 			throws AluguelInexistenteException {
 		int indice = this.obterIndiceAluguelFinalizado(cpf, idBicicleta);
@@ -128,6 +122,7 @@ public class RepositorioAluguelArray {
 
 	}
 
+	@Override
 	public Aluguel procurarAluguel(long id) throws AluguelInexistenteException {
 		int indice = this.obterIndice(id);
 		if (indice != -1) {
@@ -137,14 +132,8 @@ public class RepositorioAluguelArray {
 
 	}
 
-	public void alterarAluguel(Aluguel aluguel) throws RepositorioException {
-		int indice = this.obterIndice(aluguel.getCliente().getId());
-		// precisa do índice pra setar na posição correta
-		this.listaAluguel.set(indice, aluguel);
-		this.gravarArquivo();
-	}
-
-	public boolean existe(String cpf, long idBicicleta) {
+	@Override
+	public boolean existeAluguel(String cpf, long idBicicleta) {
 		boolean existe = false;
 		int indice = this.obterIndice(cpf, idBicicleta);
 
@@ -153,6 +142,7 @@ public class RepositorioAluguelArray {
 		return existe;
 	}
 
+	@Override
 	public void excluirAluguel(String cpf, long idBicicleta)
 			throws RepositorioException, AluguelInexistenteException {
 		int indice = this.obterIndice(cpf, idBicicleta);
@@ -163,6 +153,7 @@ public class RepositorioAluguelArray {
 			throw new AluguelInexistenteException("Aluguel não existe!");
 	}
 
+	@Override
 	public List<Aluguel> exibirALuguelAtivo() {
 		List<Aluguel> aluguelAtivo = new ArrayList<Aluguel>();
 		for (int i = 0; i < listaAluguel.size(); i++) {
@@ -173,6 +164,7 @@ public class RepositorioAluguelArray {
 		return aluguelAtivo;
 	}
 
+	@Override
 	public List<Aluguel> exibirALuguelFinalizadoEstacao() {
 		List<Aluguel> aluguelFinalizado = new ArrayList<Aluguel>();
 		for (int i = 0; i < listaAluguel.size(); i++) {
@@ -183,6 +175,7 @@ public class RepositorioAluguelArray {
 		return aluguelFinalizado;
 	}
 
+	@Override
 	public List<Aluguel> exibirALuguelComMulta() {
 		List<Aluguel> aluguelFinalizado = new ArrayList<Aluguel>();
 		for (int i = 0; i < listaAluguel.size(); i++) {
@@ -233,90 +226,23 @@ public class RepositorioAluguelArray {
 							.getBicicleta()
 							.get(this.listaAluguel.get(i).getEstacao()
 									.retornaIndiceBicicleta(idBicicleta))
-							.getAlugou() == false && listaAluguel.get(i).getDataDevolucao() != null) {
+							.getAlugou() == false
+					&& listaAluguel.get(i).getDataDevolucao() != null) {
 				indice = i;
 			}
 		}
 		return indice;
 	}
-	
-	// private int obterIndice(String cpf) {
-	// int indice = -1;
-	//
-	// for (int i = 0; i < this.listaAluguel.size(); i++) {
-	// if (this.listaAluguel.get(i).getCliente().getCpf().equals(cpf)) {
-	// indice = i;
-	// }
-	// // tratar um exceção do tipo se a conta não foi encontrada
-	// }
-	// return indice; // Retorna -1 se não encontrou
-	// }
 
-	// public boolean isAlugada(long codigoEstacao, int codigoBicicleta) {
-	// Estacao estacaoEncontrada = this.procurarEstacao(codigoEstacao);
-	// int indiceBicicleta = this.procurarIndiceBicicletaEstacao(
-	// codigoEstacao, codigoBicicleta);
-	//
-	// if (indiceBicicleta > 0 && indiceBicicleta <
-	// this.estacao[this.proxima].getBicicleta().length ) {
-	// if (estacaoEncontrada.getBicicleta()[indiceBicicleta].getAlugou() ==
-	// false) {
-	// return false; // retornará false se a bicicletar estiver disponivel.
-	// }
-	// }
-	// return true; // retornará true se a bicicletar estiver indisponivel.
-	// }
-
-	// public Aluguel procurarAluguelPorNome(String nome) {
-	// Aluguel retornoBusca = null;
-	//
-	// for (int i = 0; i < this.listaAluguel.size(); i++) {
-	// if (this.listaAluguel.get(i).getCliente().getNome().equals(nome)) {
-	// retornoBusca = this.listaAluguel.get(i);
-	// }
-	// }
-	// return retornoBusca; // retorna NULL se não encontrar o listaAluguel
-	// }
-
-	//
-	// public void alugarBicicleta(long codigoEstacao, int codigoBicicleta,
-	// Cliente cliente) { boolean retorno = this.isAlugada(codigoEstacao,
-	// codigoBicicleta); ; int indiceEstacao =
-	// this.procurarPeloIndice(codigoEstacao); int indiceBicicletaEstacao =
-	// this.procurarIndiceBicicletaEstacao( codigoEstacao, codigoBicicleta);
-	//
-	// if (retorno == false && indiceEstacao != -1 && indiceBicicletaEstacao !=
-	// -1) { this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	// .setCliente(cliente); // Insere um cliente em uma // determinada
-	// bicicleta
-	// this.estacao[indiceEstacao].getBicicleta()[indiceBicicletaEstacao]
-	// .setAlugou(true); // Informa que a bicicleta encontra-se // alugada //
-	// Falta implementar o armazenamento da hora } }
-	//
-
-	// private void cadastrarBicicletaEstacao() { // Posso implementar na
-	// fachada,
-	// // antes de montar o obj
-	// // 'estacao'
-	//
-	// for (int i = 0; i < this.estacao[i].getBicicleta().length; i++) {
-	// this.estacao[this.proxima].getBicicleta()[i].setCodigo(i + 1);
-	// this.estacao[this.proxima].getBicicleta()[i].setAlugou(false);
-	// }
-	// }
-	//
-	// public void cadastrarEstação(Estacao estacao) {
-	//
-	// if ((this.procurarEstacao(estacao.getCodigo()) == null)
-	// && this.procurarPeloIndice(estacao.getCodigo()) != this.proxima) {
-	// this.estacao[this.proxima] = estacao;
-	//
-	// }
-	// if (this.proxima == this.estacao.length) {
-	// this.duplicaArrayEstacao();
-	// }
-	// this.cadastrarBicicletaEstacao();
-	// this.proxima += 1;
-	// }
-
+	@Override
+	public void alterarAluguel(String cpf, long idBicicleta)
+			throws RepositorioException, AluguelInexistenteException {
+		Aluguel aluguel = this.procurarAluguel(cpf, idBicicleta);
+		if (aluguel != null) {
+			int indice = this.obterIndice(aluguel.getCliente().getId());
+			this.listaAluguel.set(indice, aluguel);
+			this.gravarArquivo();
+		} else
+			throw new AluguelInexistenteException("Aluguel não existe!");
+	}
 }

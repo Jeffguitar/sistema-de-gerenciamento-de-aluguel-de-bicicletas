@@ -67,22 +67,24 @@ public class Principal {
 			System.err.println(e);
 		}
 		do {
+			do {
 
-			String resp;
-			try {
-				System.out
-						.println("-----BEM VINDO AO GERENCIADOR DO SISTEMA DE ALUGUEL DE BICICLETAS (SAB)-----");
-				System.out.println();
-				System.out.println("Já possui cadastro? (Sair = 0)");
-				resp = read.nextLine();
-				if (resp.equalsIgnoreCase("0"))
-					return;
-				if (!resp.equalsIgnoreCase("s") && !resp.equalsIgnoreCase("n"))
-					throw new OpcaoInvalidaException();
-				else if (resp.equalsIgnoreCase("n")) {
-					cadastrarAdministrador();
-				} else if (resp.equalsIgnoreCase("s")) {
-					do {
+				String resp;
+				try {
+					System.out
+							.println("-----BEM VINDO AO GERENCIADOR DO SISTEMA DE ALUGUEL DE BICICLETAS (SAB)-----");
+					System.out.println();
+					System.out
+							.println("Já possui cadastro de administrador? (Sair = 0)");
+					resp = read.nextLine();
+					if (resp.equalsIgnoreCase("0"))
+						return;
+					if (!resp.equalsIgnoreCase("s")
+							&& !resp.equalsIgnoreCase("n"))
+						throw new OpcaoInvalidaException();
+					else if (resp.equalsIgnoreCase("n")) {
+						cadastrarAdministrador();
+					} else if (resp.equalsIgnoreCase("s")) {
 
 						System.out
 								.println("Informe seu CPF para acessar o sistema: (Sair = 0)");
@@ -90,45 +92,50 @@ public class Principal {
 						if (cpf.equalsIgnoreCase("0"))
 							break;
 						if (fachada.existeAdministrador(cpf)) {
-							System.out.println("Menu:");
-							System.out.println("(1) Clientes");
-							System.out.println("(2) Funcionários");
-							System.out.println("(0) Sair");
-							System.out.print("Opcção: ");
-							opcao = read.nextInt();
+							do {
 
-							verificarOpcao(opcao, 0, 2);
+								System.out.println("Menu:");
+								System.out.println("(1) Clientes");
+								System.out.println("(2) Funcionários");
+								System.out.println("(0) Sair");
+								System.out.print("Opcção: ");
+								opcao = read.nextInt();
 
-							if (opcao == 0)
-								break;
+								verificarOpcao(opcao, 0, 2);
 
-							switch (opcao) {
-							case 1:
-								menuClientes();
-								break;
-							case 2:
-								menuFuncionarios();
-								break;
-							default:
-								break;
-							}
+								if (opcao == 0)
+									break;
 
-							System.out.println();
+								switch (opcao) {
+								case 1:
+									menuClientes();
+									break;
+								case 2:
+									menuFuncionarios();
+									break;
+								default:
+									break;
+								}
+
+								System.out.println();
+							} while (true);
+
 						} else
 							throw new AdministradorNaoCadastradoException(
 									"Você não cadastrou sua conta de administrador!");
 
-					} while (true);
-				} else {
-					throw new AdministradorNaoCadastradoException(
-							"Você precisa cadastrar um administrador para poder acessar o sistema!");
+					} else {
+						throw new AdministradorNaoCadastradoException(
+								"Você precisa cadastrar um administrador para poder acessar o sistema!");
+					}
+
+				} catch (OpcaoInvalidaException
+						| AdministradorNaoCadastradoException
+						| AdministradorInexistenteException e) {
+					System.err.println(e);
+					System.out.println();
 				}
-			} catch (OpcaoInvalidaException
-					| AdministradorNaoCadastradoException
-					| AdministradorInexistenteException e) {
-				System.err.println(e);
-				System.out.println();
-			}
+			} while (true);
 		} while (true);
 	}
 
@@ -281,7 +288,7 @@ public class Principal {
 		System.out.print("Informe o CPF: ");
 		String cpf = read.next();
 		try {
-			if (validaCpf(cpf) && !fachada.existeCliente(cpf)) {
+			if (!fachada.existeCliente(cpf)) {
 				do {
 					System.out.println("\nCadastrar cliente (Sair = 0):");
 					System.out.print("Informe o nome: ");
@@ -427,12 +434,13 @@ public class Principal {
 					System.err.println(e);
 
 				}
-			}
+			} else
+				throw new ClienteJaCadastradoException(cpf);
 		} catch (ClienteNaoCadastradoException | NomePessoaInvalidaException
 				| NumeroCPFException | NumeroRGException
 				| SexoInvalidoException | TelefoneException | EmailException
 				| RuaException | CepException | BairroException
-				| CidadeException e) {
+				| CidadeException | ClienteJaCadastradoException e) {
 			System.err.println(e);
 		}
 	}
@@ -988,7 +996,9 @@ public class Principal {
 			} catch (OpcaoInvalidaException e) {
 				System.err.println(e);
 			}
-		} while (opcao != 0);
+			if (opcao == 0)
+				break;
+		} while (true);
 	}
 
 	private static void exibirAluguelMultado() {
@@ -1026,7 +1036,7 @@ public class Principal {
 		try {
 			System.out.println("Exibição dos Cliente com aluguéis Ativos");
 			System.out.println();
-			Format formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+			// Format formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			fachada.exibirALuguelAtivo();
 			System.out.println("Quantidade de aluguéis ativos: "
 					+ fachada.exibirALuguelAtivo().size());
@@ -1035,8 +1045,8 @@ public class Principal {
 				System.out.println();
 				System.out.println("CPF: " + aluguel.getCliente().getCpf());
 				System.out.println();
-				System.out.println("Data de devolução: "
-						+ formato.format(aluguel.getDataDevolucao().getTime()));
+				// System.out.println("Data de devolução: "
+				// + formato.format(aluguel.getDataDevolucao().getTime()));
 				System.out.println();
 				System.out.println("____________________________");
 			}
@@ -1279,51 +1289,5 @@ public class Principal {
 			System.out.println("parametro email null");
 			return false;
 		}
-	}
-
-	private static boolean validaCpf(String strCpf) {
-		strCpf = strCpf.replace('.', ' ');// onde há ponto coloca espaço
-		strCpf = strCpf.replace('/', ' ');// onde há barra coloca espaço
-		strCpf = strCpf.replace('-', ' ');// onde há traço coloca espaço
-		strCpf = strCpf.replaceAll(" ", "");// retira espaço
-		if (strCpf.equals("00000000000") || strCpf.equals("11111111111")
-				|| strCpf.equals("22222222222") || strCpf.equals("33333333333")
-				|| strCpf.equals("44444444444") || strCpf.equals("55555555555")
-				|| strCpf.equals("66666666666") || strCpf.equals("77777777777")
-				|| strCpf.equals("88888888888") || strCpf.equals("99999999999")) {
-			return false;
-		}
-		if (strCpf.equals("")) {
-			return false;
-		}
-		int d1, d2;
-		int digito1, digito2, resto;
-		int digitoCPF;
-		String nDigResult;
-		d1 = d2 = 0;
-		digito1 = digito2 = resto = 0;
-		for (int nCount = 1; nCount < strCpf.length() - 1; nCount++) {
-			digitoCPF = Integer.valueOf(strCpf.substring(nCount - 1, nCount))
-					.intValue();
-			d1 = d1 + (11 - nCount) * digitoCPF;
-			d2 = d2 + (12 - nCount) * digitoCPF;
-		}
-		resto = (d1 % 11);
-		if (resto < 2) {
-			digito1 = 0;
-		} else {
-			digito1 = 11 - resto;
-		}
-		d2 += 2 * digito1;
-		resto = (d2 % 11);
-		if (resto < 2) {
-			digito2 = 0;
-		} else {
-			digito2 = 11 - resto;
-		}
-		String nDigVerific = strCpf.substring(strCpf.length() - 2,
-				strCpf.length());
-		nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
-		return nDigVerific.equals(nDigResult);
 	}
 }
