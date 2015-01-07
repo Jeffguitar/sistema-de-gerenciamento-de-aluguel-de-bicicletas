@@ -15,14 +15,13 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteJaCadastr
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClienteNaoCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
-public class RepositorioClienteArray {
+public class RepositorioClienteArray implements IRepositorioClienteArray {
 
 	private List<Cliente> listaCliente;
-	private static RepositorioClienteArray repositorio;
 	private final String ARQUIVO = "clientes.dat";
 	private File arquivoCliente;
 
-	private RepositorioClienteArray() throws ClassNotFoundException,
+	public RepositorioClienteArray() throws ClassNotFoundException,
 			RepositorioException, ClienteJaCadastradoException {
 		try {
 			this.listaCliente = new ArrayList<Cliente>();
@@ -35,15 +34,6 @@ public class RepositorioClienteArray {
 			throw new RepositorioException("Erro na abertura do arquivo "
 					+ this.ARQUIVO + ".");
 		}
-	}
-
-	public static RepositorioClienteArray getInstance()
-			throws ClassNotFoundException, RepositorioException,
-			ClienteJaCadastradoException {
-		if (repositorio == null) {
-			repositorio = new RepositorioClienteArray();
-		}
-		return repositorio;
 	}
 
 	private void lerArquivo() throws RepositorioException,
@@ -149,10 +139,10 @@ public class RepositorioClienteArray {
 			throw new ClienteNaoCadastradoException(cpf);
 	}
 
-	public List<Cliente> exibirClientes(){
+	public List<Cliente> exibirClientes() {
 		return this.listaCliente;
 	}
-	
+
 	private int obterIndice(String cpf) {
 		int indice = -1;
 

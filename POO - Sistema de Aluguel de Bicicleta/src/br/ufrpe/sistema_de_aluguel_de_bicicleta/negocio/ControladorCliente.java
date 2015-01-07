@@ -12,11 +12,11 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 public class ControladorCliente {
 
 	private RepositorioClienteArray repositorio;
-	private long idCliente = 1;
+	private static long idCliente = 1;
 
 	public ControladorCliente() throws ClassNotFoundException,
 			RepositorioException, ClienteJaCadastradoException {
-		this.repositorio = RepositorioClienteArray.getInstance();
+		this.repositorio = new RepositorioClienteArray();
 	}
 
 	public void cadastrar(Cliente cliente) throws RepositorioException,
@@ -24,9 +24,9 @@ public class ControladorCliente {
 		boolean indice = this.existe(cliente.getCpf());
 
 		if (indice == false && cliente != null) {
-			cliente.setId(this.idCliente);
+			cliente.setId(ControladorCliente.idCliente);
 			repositorio.cadastrarCliente(cliente);
-			this.idCliente++;
+			ControladorCliente.idCliente++;
 		} else
 			throw new ClienteJaCadastradoException(cliente.getCpf());
 	}

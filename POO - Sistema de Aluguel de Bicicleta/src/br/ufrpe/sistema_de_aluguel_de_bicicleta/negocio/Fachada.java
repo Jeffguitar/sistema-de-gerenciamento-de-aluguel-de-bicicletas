@@ -22,6 +22,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.ClientesInexiste
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.IdIncorreto;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.InicializacaoSistemaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 
 public class Fachada implements IFachada {
@@ -29,6 +30,22 @@ public class Fachada implements IFachada {
 	private ControladorCliente cliente;
 	private ControladorAluguel aluguel;
 	private ControladorEstacao estacao;
+
+	public static IFachada instance;
+
+	public static IFachada getInstance() throws InicializacaoSistemaException {
+
+		if (Fachada.instance == null) {
+			try {
+				Fachada.instance = new Fachada();
+			} catch (ClassNotFoundException | RepositorioException
+					| ClienteJaCadastradoException e) {
+				e.printStackTrace();
+				throw new InicializacaoSistemaException();
+			}
+		}
+		return Fachada.instance;
+	}
 
 	public Fachada() throws ClassNotFoundException, RepositorioException,
 			ClienteJaCadastradoException {
@@ -123,7 +140,7 @@ public class Fachada implements IFachada {
 	@Override
 	public void alterarAluguel(String cpf, long idBicicleta)
 			throws RepositorioException, AluguelInexistenteException {
-		this.aluguel.alterar(cpf, idBicicleta);
+		this.aluguel.alterarAluguel(cpf, idBicicleta);
 
 	}
 

@@ -9,11 +9,11 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 public class ControladorAdministrador {
 
 	private RepositorioAdministradorArray repositorio;
-	private long idAdministrador = 1;
+	private static long idAdministrador = 1;
 
 	public ControladorAdministrador() throws ClassNotFoundException,
 			RepositorioException {
-		this.repositorio = RepositorioAdministradorArray.getInstance();
+		this.repositorio = new RepositorioAdministradorArray();
 	}
 
 	public void cadastrar(Administrador adm) throws RepositorioException,
@@ -22,9 +22,9 @@ public class ControladorAdministrador {
 		boolean indice = this.existe(adm.getCpf());
 
 		if (indice == false && adm != null) {
-			adm.setId(this.idAdministrador);
+			adm.setId(ControladorAdministrador.idAdministrador);
 			repositorio.cadastrarAdministrador(adm);
-			this.idAdministrador++;
+			ControladorAdministrador.idAdministrador++;
 		} else
 			throw new AdministradorJaExistenteException(adm.getCpf());
 	}
