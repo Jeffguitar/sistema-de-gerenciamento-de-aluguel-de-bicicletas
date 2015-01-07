@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.Fachada;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.IFachada;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Administrador;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Aluguel;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Bicicleta;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Cliente;
@@ -17,6 +18,9 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Contato;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Endereco;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.Estacao;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.classes_basicas.SexoTipo;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorInexistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorJaExistenteException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AdministradorNaoCadastradoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelAtivoInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelComMultaInexistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.AluguelInativoInexistenteException;
@@ -46,6 +50,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioExcep
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RuaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.SexoInvalidoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.TelefoneException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.senhaInvalidaException;
 
 public class Principal {
 
@@ -73,39 +78,150 @@ public class Principal {
 				| RepositorioException | ClienteJaCadastradoException e) {
 			System.err.println(e);
 		}
-
 		do {
+
+			String resp;
 			try {
-				System.out.println("Menu:");
-				System.out.println("(1) Clientes");
-				System.out.println("(2) Funcionários");
-				System.out.println("(0) Sair");
-				System.out.print("Opcção: ");
-				opcao = read.nextInt();
-
-				verificarOpcao(opcao, 0, 2);
-
-				if (opcao == 0)
-					break;
-
-				switch (opcao) {
-				case 1:
-					menuClientes();
-					break;
-				case 2:
-					menuFuncionarios();
-					break;
-				default:
-					break;
-				}
-
+				System.out
+						.println("-----BEM VINDO AO GERENCIADOR DO SISTEMA DE ALUGUEL DE BICICLETAS (SAB)-----");
 				System.out.println();
+				System.out.println("Já possui cadastro? (Sair = 0)");
+				resp = read.nextLine();
+				if (resp.equalsIgnoreCase("0"))
+					return;
+				if (!resp.equalsIgnoreCase("s") && !resp.equalsIgnoreCase("n"))
+					throw new OpcaoInvalidaException();
+				else if (resp.equalsIgnoreCase("n")) {
+					cadastrarAdministrador();
+				} else if (resp.equalsIgnoreCase("s")) {
+					do {
 
-			} catch (OpcaoInvalidaException e) {
+						System.out
+								.println("Informe seu CPF para acessar o sistema: (Sair = 0)");
+						String cpf = read.nextLine();
+						if (cpf.equalsIgnoreCase("0"))
+							break;
+						if (fachada.existeAdministrador(cpf)) {
+							System.out.println("Menu:");
+							System.out.println("(1) Clientes");
+							System.out.println("(2) Funcionários");
+							System.out.println("(0) Sair");
+							System.out.print("Opcção: ");
+							opcao = read.nextInt();
+
+							verificarOpcao(opcao, 0, 2);
+
+							if (opcao == 0)
+								break;
+
+							switch (opcao) {
+							case 1:
+								menuClientes();
+								break;
+							case 2:
+								menuFuncionarios();
+								break;
+							default:
+								break;
+							}
+
+							System.out.println();
+						} else
+							throw new AdministradorNaoCadastradoException(
+									"Você não cadastrou sua conta de administrador!");
+
+					} while (true);
+				} else {
+					throw new AdministradorNaoCadastradoException(
+							"Você precisa cadastrar um administrador para poder acessar o sistema!");
+				}
+			} catch (OpcaoInvalidaException
+					| AdministradorNaoCadastradoException
+					| AdministradorInexistenteException e) {
 				System.err.println(e);
 				System.out.println();
 			}
 		} while (true);
+	}
+
+	private static void cadastrarAdministrador() {
+
+		Administrador administrador = new Administrador();
+
+		System.out.print("Informe o CPF: ");
+		String cpf = read.nextLine();
+
+		try {
+			if (!fachada.existeAdministrador(cpf)) {
+				do {
+					System.out.println("\nCadastrar Administrador (Sair = 0):");
+					System.out.print("Informe o nome: ");
+					String nome = read.nextLine();
+					if (nome != null) {
+						letrasIniciaisMaiusculas(nome);
+						if (nome.equalsIgnoreCase("0"))
+							return;
+						administrador.setNome(nome);
+						break;
+					} else
+						throw new NomePessoaInvalidaException();
+				} while (true);
+
+				do {
+					if (cpf != null) {
+						if (cpf.equalsIgnoreCase("0"))
+							return;
+						administrador.setCpf(cpf);
+						break;
+					} else
+						throw new NumeroCPFException();
+				} while (true);
+
+				do {
+					System.out.print("Informe a senha de login: (Sair = 0)");
+					String senha = read.nextLine();
+
+					if (senha != null) {
+						if (senha.equalsIgnoreCase("0"))
+							return;
+
+						System.out.print("Confirme a senha: ");
+						String novaSenha = read.nextLine();
+
+						if (novaSenha != null) {
+							if (novaSenha.equalsIgnoreCase("0"))
+								return;
+							if (senha.equals(novaSenha)) {
+								administrador.setLogin(senha);
+								break;
+							} else
+								throw new senhaInvalidaException(
+										"As senhas não conferem. Por favor, insira-as novamente.");
+						} else {
+							throw new senhaInvalidaException("Senha inválida!");
+						}
+					} else {
+						throw new senhaInvalidaException("Senha inválida!");
+					}
+				} while (true);
+				try {
+					fachada.cadastrarAdministrador(administrador);
+					System.out.println("\nCadastro realizado com sucesso!\n");
+				} catch (RepositorioException
+						| AdministradorInexistenteException e) {
+					System.err.println(e);
+
+				}
+			} else {
+				throw new AdministradorJaExistenteException(
+						administrador.getCpf());
+			}
+		} catch (NomePessoaInvalidaException | NumeroCPFException
+				| senhaInvalidaException | AdministradorJaExistenteException
+				| AdministradorInexistenteException e) {
+			System.err.println(e);
+		}
+
 	}
 
 	private static void menuClientes() {

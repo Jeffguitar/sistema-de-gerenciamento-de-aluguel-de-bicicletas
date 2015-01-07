@@ -133,7 +133,7 @@ public class RepositorioAdministradorArray {
 		if (indice != -1)
 			return true;
 		else
-			throw new AdministradorInexistenteException(cpf);
+			return false;
 	}
 
 	public boolean excluirAdministrador(String cpf)
