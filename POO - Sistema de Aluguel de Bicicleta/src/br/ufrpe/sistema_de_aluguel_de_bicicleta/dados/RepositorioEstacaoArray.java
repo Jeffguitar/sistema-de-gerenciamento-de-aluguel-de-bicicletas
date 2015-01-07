@@ -131,7 +131,7 @@ public class RepositorioEstacaoArray {
 		if (indice != -1)
 			return true;
 		else
-			throw new EstacaoNaoExisteException(id);
+			return false;
 	}
 
 	public boolean excluirEstacao(long id) throws RepositorioException,
