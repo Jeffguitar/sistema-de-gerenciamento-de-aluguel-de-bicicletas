@@ -781,11 +781,14 @@ public class Principal {
 			System.out.print("Informe o CPF: ");
 			String cpf = read.next();
 			if (cpf != null) {
+				if (cpf.equalsIgnoreCase("0"))
+					return;
 				if (fachada.existeCliente(cpf)) {
 					System.out.print("Informe o ID da bicicleta: ");
 					Long id = read.nextLong();
+					if (id == 0)
+						return;
 					if (id > 0) {
-
 						Format formato = new SimpleDateFormat(
 								"dd/MM/yyyy - HH:mm:ss");
 						Aluguel aluguel = fachada.procurarAluguelFinalizado(
@@ -874,10 +877,10 @@ public class Principal {
 
 	private static void exibirAluguelMultado() {
 		try {
-			System.out.println("Exibição dos Cliente com aluguéis Ativos");
+			System.out.println("Exibição dos cliente com aluguéis multados");
 			System.out.println();
 			fachada.exibirALuguelComMulta();
-			System.out.println("Quantidade de aluguéis ativos: "
+			System.out.println("Quantidade de aluguéis multados: "
 					+ fachada.exibirALuguelComMulta().size());
 			Format formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			for (Aluguel aluguel : fachada.exibirALuguelComMulta()) {
@@ -890,6 +893,9 @@ public class Principal {
 				System.out.println();
 				System.out.println("Data de devolução: "
 						+ formato.format(aluguel.getDataDevolucao().getTime()));
+				System.out.println();
+				System.out.println("Valor da multa: " + aluguel.getValor()
+						+ " Reais.");
 				System.out.println();
 				System.out.println("____________________________");
 			}
@@ -904,6 +910,7 @@ public class Principal {
 		try {
 			System.out.println("Exibição dos Cliente com aluguéis Ativos");
 			System.out.println();
+			Format formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			fachada.exibirALuguelAtivo();
 			System.out.println("Quantidade de aluguéis ativos: "
 					+ fachada.exibirALuguelAtivo().size());
@@ -911,6 +918,9 @@ public class Principal {
 				System.out.println("Nome: " + aluguel.getCliente().getNome());
 				System.out.println();
 				System.out.println("CPF: " + aluguel.getCliente().getCpf());
+				System.out.println();
+				System.out.println("Data de devolução: "
+						+ formato.format(aluguel.getDataDevolucao().getTime()));
 				System.out.println();
 				System.out.println("____________________________");
 			}
@@ -925,12 +935,25 @@ public class Principal {
 			System.out.println("Exibição dos Cliente Cadastrados");
 			System.out.println();
 			fachada.exibirClientes();
+			System.out.println("Quantidade de aluguéis finalizados: "
+					+ fachada.exibirClientes().size());
 			for (Cliente cliente : fachada.exibirClientes()) {
 				System.out.println("Nome: " + cliente.getNome());
 				System.out.println();
 				System.out.println("CPF: " + cliente.getCpf());
 				System.out.println();
-				System.out.println("____________________________");
+				System.out.println("Sexo: " + cliente.getSexo().getDescricao());
+				System.out.println();
+				System.out.println("Endereço: "
+						+ cliente.getEndereco().getEndereco() + " - "
+						+ cliente.getEndereco().getBairro() + " - "
+						+ cliente.getEndereco().getCidade());
+				System.out.println();
+				System.out.println("Contato: "
+						+ cliente.getContato().getTelefone() + " - "
+						+ "Email: " + cliente.getContato().getEmail());
+				System.out.println();
+				System.out.println("____________________");
 			}
 		} catch (ClientesInexistentesException e) {
 			System.err.println(e);
@@ -939,10 +962,10 @@ public class Principal {
 
 	private static void exibirAluguelFinalizado() {
 		try {
-			System.out.println("Exibição dos Cliente com aluguéis Ativos");
+			System.out.println("Exibição dos aluguéis finalizados");
 			System.out.println();
 			fachada.exibirALuguelFinalizadoEstacao();
-			System.out.println("Quantidade de aluguéis ativos: "
+			System.out.println("Quantidade de aluguéis finalizados: "
 					+ fachada.exibirALuguelFinalizadoEstacao().size());
 			Format formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			for (Aluguel aluguel : fachada.exibirALuguelFinalizadoEstacao()) {
@@ -955,6 +978,9 @@ public class Principal {
 				System.out.println();
 				System.out.println("Data de devolução: "
 						+ formato.format(aluguel.getDataDevolucao().getTime()));
+				System.out.println();
+				System.out.println("Valor da multa: " + aluguel.getValor()
+						+ " Reais.");
 				System.out.println();
 				System.out.println("____________________________");
 			}
@@ -975,6 +1001,8 @@ public class Principal {
 
 				System.out.println("Informe o ID da estação:");
 				Long idEstacao = read.nextLong();
+				if (idEstacao == 0)
+					return;
 				if (idEstacao > 0) {
 					Estacao estacao = fachada.procurarEstacao(idEstacao);
 					if (estacao == null)
@@ -1002,6 +1030,8 @@ public class Principal {
 
 				System.out.println("Informe o ID da estação:");
 				Long idEstacao = read.nextLong();
+				if (idEstacao == 0)
+					return;
 				if (idEstacao > 0) {
 					Estacao estacao = fachada.procurarEstacao(idEstacao);
 
@@ -1080,11 +1110,6 @@ public class Principal {
 						.println("Informe a quantidade de bicicletas que a estação possuirá:");
 				int totalBicicletas = read.nextInt();
 				if (totalBicicletas > 0) {
-					// for (int i = 0; i < totalBicicletas; i++) {
-					// listaBicicleta.add(i, bicicleta);
-					// listaBicicleta.get(i).setCodigo(i+1);
-					// listaBicicleta.get(i).setAlugou(false);
-					// }
 					System.out.println("Informe uma descrição para a estação:");
 					read.nextLine();
 					String descricaoEstacao = read.nextLine();
