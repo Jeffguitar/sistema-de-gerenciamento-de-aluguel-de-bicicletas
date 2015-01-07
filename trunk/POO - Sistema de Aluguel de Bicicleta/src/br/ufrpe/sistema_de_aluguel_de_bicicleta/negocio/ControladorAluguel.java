@@ -124,13 +124,14 @@ public class ControladorAluguel {
 				- aluguel.get(Calendar.SECOND);
 
 		if (mes == 0 && dia == 0) {
-			if ((hora == 0 && (minuto >= 0 && minuto < 60) && (segundo >= 0 && segundo < 60))
-					|| (hora == 1 && minuto == 0 && segundo == 0)) { // De 0:0:0
+			if ((hora == 0 && (minuto >= 0 && minuto < 60) && (segundo >= 0 && segundo < 60))){
+				if (hora == 1 && minuto == 0 && segundo == 0) { // De 0:0:0
 																		// até
 																		// 0:59:59
 																		// OU de
 																		// 1:0:0
 				preco = 0.0;
+				}
 			} else if ((hora > 1 && (minuto >= 0 && minuto < 60) && (segundo > 0 && segundo < 60))
 					|| (hora == 2 && minuto == 0 && segundo == 0)) { // De 1:0:1
 																		// até
