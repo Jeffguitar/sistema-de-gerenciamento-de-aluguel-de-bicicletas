@@ -58,18 +58,6 @@ public class Principal {
 	private static Scanner read = new Scanner(System.in);
 	private static int opcao;
 
-	private static void inicializarSistema() throws ClassNotFoundException,
-			RepositorioException, ClienteJaCadastradoException,
-			InicioSistemaException {
-		fachada = new Fachada();
-	}
-
-	private static void verificarOpcao(int opcao2, int i, int f)
-			throws OpcaoInvalidaException {
-		if (opcao < i || opcao > f)
-			throw new OpcaoInvalidaException();
-	}
-
 	public static void main(String[] args) {
 
 		try {
@@ -142,6 +130,18 @@ public class Principal {
 				System.out.println();
 			}
 		} while (true);
+	}
+
+	private static void inicializarSistema() throws ClassNotFoundException,
+			RepositorioException, ClienteJaCadastradoException,
+			InicioSistemaException {
+		fachada = new Fachada();
+	}
+
+	private static void verificarOpcao(int opcao2, int i, int f)
+			throws OpcaoInvalidaException {
+		if (opcao < i || opcao > f)
+			throw new OpcaoInvalidaException();
 	}
 
 	private static void cadastrarAdministrador() {
