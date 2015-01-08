@@ -44,8 +44,11 @@ public class RepositorioEstacaoArray implements IRepositorioEstacaoArray {
 			oisEstacao = new ObjectInputStream(fisEstacao);
 			while (true) {
 				try {
-					Estacao adm = (Estacao) oisEstacao.readObject();
-					this.cadastrarEstacao(adm);
+					@SuppressWarnings("unchecked")
+					ArrayList<Estacao> estacao = (ArrayList<Estacao>) oisEstacao
+							.readObject();
+					for (Estacao a : estacao)
+						this.cadastrarEstacao(a);
 				} catch (EOFException e) {
 					break;
 				}
@@ -72,21 +75,21 @@ public class RepositorioEstacaoArray implements IRepositorioEstacaoArray {
 	}
 
 	private void gravarArquivo() throws RepositorioException {
-		FileOutputStream fosRestaurante = null;
-		ObjectOutputStream oosRestaurante = null;
+		FileOutputStream fosEstacao = null;
+		ObjectOutputStream oosEstacao = null;
 		try {
-			fosRestaurante = new FileOutputStream(arquivoEstacao);
-			oosRestaurante = new ObjectOutputStream(fosRestaurante);
-			for (Estacao adm : this.listaEstacao)
-				oosRestaurante.writeObject(adm);
+			fosEstacao = new FileOutputStream(arquivoEstacao);
+			oosEstacao = new ObjectOutputStream(fosEstacao);
+			oosEstacao.writeObject(listaEstacao);
+			oosEstacao.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RepositorioException("Erro na gravação do arquivo "
 					+ this.ARQUIVO + ".");
 		} finally {
 			try {
-				fosRestaurante.close();
-				oosRestaurante.close();
+				fosEstacao.close();
+				oosEstacao.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RepositorioException("Erro no fechamento do arquivo "

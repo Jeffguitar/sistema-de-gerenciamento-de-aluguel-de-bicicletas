@@ -45,8 +45,11 @@ public class RepositorioClienteArray implements IRepositorioClienteArray {
 			oisCliente = new ObjectInputStream(fisCliente);
 			while (true) {
 				try {
-					Cliente cliente = (Cliente) oisCliente.readObject();
-					this.cadastrarCliente(cliente);
+					@SuppressWarnings("unchecked")
+					ArrayList<Cliente> cliente = (ArrayList<Cliente>) oisCliente
+							.readObject();
+					for (Cliente a : cliente)
+						this.cadastrarCliente(a);
 				} catch (EOFException e) {
 					break;
 				}
@@ -73,21 +76,21 @@ public class RepositorioClienteArray implements IRepositorioClienteArray {
 	}
 
 	private void gravarArquivo() throws RepositorioException {
-		FileOutputStream fosRestaurante = null;
-		ObjectOutputStream oosRestaurante = null;
+		FileOutputStream fosCliente = null;
+		ObjectOutputStream oosCliente = null;
 		try {
-			fosRestaurante = new FileOutputStream(arquivoCliente);
-			oosRestaurante = new ObjectOutputStream(fosRestaurante);
-			for (Cliente cliente : this.listaCliente)
-				oosRestaurante.writeObject(cliente);
+			fosCliente = new FileOutputStream(arquivoCliente);
+			oosCliente = new ObjectOutputStream(fosCliente);
+			oosCliente.writeObject(listaCliente);
+			oosCliente.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RepositorioException("Erro na gravação do arquivo "
 					+ this.ARQUIVO + ".");
 		} finally {
 			try {
-				fosRestaurante.close();
-				oosRestaurante.close();
+				fosCliente.close();
+				oosCliente.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RepositorioException("Erro no fechamento do arquivo "
