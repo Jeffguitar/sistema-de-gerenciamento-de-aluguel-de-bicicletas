@@ -40,6 +40,7 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EmailException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoExistenteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.EstacaoNaoExisteException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.IdIncorreto;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.InicializacaoSistemaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.InicioSistemaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.NomePessoaInvalidaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.NumeroBicicletaInvalidoException;
@@ -48,9 +49,9 @@ import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.NumeroRGExceptio
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.OpcaoInvalidaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RepositorioException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.RuaException;
+import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.SenhaInvalidaException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.SexoInvalidoException;
 import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.TelefoneException;
-import br.ufrpe.sistema_de_aluguel_de_bicicleta.negocio.excecao.senhaInvalidaException;
 
 public class Principal {
 
@@ -66,6 +67,7 @@ public class Principal {
 				| RepositorioException | ClienteJaCadastradoException e) {
 			System.err.println(e);
 		}
+
 		do {
 			do {
 
@@ -87,38 +89,44 @@ public class Principal {
 					} else if (resp.equalsIgnoreCase("s")) {
 
 						System.out
-								.println("Informe seu CPF para acessar o sistema: (Sair = 0)");
+								.println("Informe seu CPF e a senha para acessar o sistema: (Sair = 0)");
 						String cpf = read.nextLine();
+						String senhaAcesso = read.nextLine();
 						if (cpf.equalsIgnoreCase("0"))
 							break;
 						if (fachada.existeAdministrador(cpf)) {
-							do {
+							if (fachada.procurarAdministrador(cpf).getLogin()
+									.equals(senhaAcesso)) {
+								do {
 
-								System.out.println("Menu:");
-								System.out.println("(1) Clientes");
-								System.out.println("(2) Funcionários");
-								System.out.println("(0) Sair");
-								System.out.print("Opcção: ");
-								opcao = read.nextInt();
+									System.out.println("Menu:");
+									System.out.println("(1) Clientes");
+									System.out.println("(2) Funcionários");
+									System.out.println("(0) Sair");
+									System.out.print("Opcção: ");
+									opcao = read.nextInt();
 
-								verificarOpcao(opcao, 0, 2);
+									verificarOpcao(opcao, 0, 2);
 
-								if (opcao == 0)
-									break;
+									if (opcao == 0)
+										break;
 
-								switch (opcao) {
-								case 1:
-									menuClientes();
-									break;
-								case 2:
-									menuFuncionarios();
-									break;
-								default:
-									break;
-								}
+									switch (opcao) {
+									case 1:
+										menuClientes();
+										break;
+									case 2:
+										menuFuncionarios();
+										break;
+									default:
+										break;
+									}
 
-								System.out.println();
-							} while (true);
+									System.out.println();
+								} while (true);
+							} else
+								throw new SenhaInvalidaException(
+										"Senha incorreta.");
 
 						} else
 							throw new AdministradorNaoCadastradoException(
@@ -131,7 +139,8 @@ public class Principal {
 
 				} catch (OpcaoInvalidaException
 						| AdministradorNaoCadastradoException
-						| AdministradorInexistenteException e) {
+						| AdministradorInexistenteException
+						| SenhaInvalidaException e) {
 					System.err.println(e);
 					System.out.println();
 				}
@@ -142,7 +151,11 @@ public class Principal {
 	private static void inicializarSistema() throws ClassNotFoundException,
 			RepositorioException, ClienteJaCadastradoException,
 			InicioSistemaException {
-		fachada = new Fachada();
+		try {
+			fachada = Fachada.getInstance();
+		} catch (InicializacaoSistemaException e) {
+			System.err.println(e);
+		}
 	}
 
 	private static void verificarOpcao(int opcao2, int i, int f)
@@ -155,8 +168,11 @@ public class Principal {
 
 		Administrador administrador = new Administrador();
 
-		System.out.print("Informe o CPF: ");
+		System.out.print("Informe o CPF: (Sair = 0)");
 		String cpf = read.nextLine();
+
+		if (cpf.equalsIgnoreCase("0"))
+			return;
 
 		try {
 			if (!fachada.existeAdministrador(cpf)) {
@@ -202,13 +218,13 @@ public class Principal {
 								administrador.setLogin(senha);
 								break;
 							} else
-								throw new senhaInvalidaException(
+								throw new SenhaInvalidaException(
 										"As senhas não conferem. Por favor, insira-as novamente.");
 						} else {
-							throw new senhaInvalidaException("Senha inválida!");
+							throw new SenhaInvalidaException("Senha inválida!");
 						}
 					} else {
-						throw new senhaInvalidaException("Senha inválida!");
+						throw new SenhaInvalidaException("Senha inválida!");
 					}
 				} while (true);
 				try {
@@ -224,7 +240,7 @@ public class Principal {
 						administrador.getCpf());
 			}
 		} catch (NomePessoaInvalidaException | NumeroCPFException
-				| senhaInvalidaException | AdministradorJaExistenteException
+				| SenhaInvalidaException | AdministradorJaExistenteException
 				| AdministradorInexistenteException e) {
 			System.err.println(e);
 		}
@@ -1061,7 +1077,7 @@ public class Principal {
 			System.out.println("Exibição dos Cliente Cadastrados");
 			System.out.println();
 			fachada.exibirClientes();
-			System.out.println("Quantidade de aluguéis finalizados: "
+			System.out.println("Quantidade de clientes cadastrados: "
 					+ fachada.exibirClientes().size());
 			for (Cliente cliente : fachada.exibirClientes()) {
 				System.out.println("Nome: " + cliente.getNome());

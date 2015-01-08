@@ -44,9 +44,11 @@ public class RepositorioAdministradorArray implements
 			oisAdministrador = new ObjectInputStream(fisAdministrador);
 			while (true) {
 				try {
-					Administrador adm = (Administrador) oisAdministrador
+					@SuppressWarnings("unchecked")
+					ArrayList<Administrador> adm = (ArrayList<Administrador>) oisAdministrador
 							.readObject();
-					this.cadastrarAdministrador(adm);
+					for (Administrador a : adm)
+						this.cadastrarAdministrador(a);
 				} catch (EOFException e) {
 					break;
 				}
@@ -73,21 +75,21 @@ public class RepositorioAdministradorArray implements
 	}
 
 	private void gravarArquivo() throws RepositorioException {
-		FileOutputStream fosRestaurante = null;
-		ObjectOutputStream oosRestaurante = null;
+		FileOutputStream fosAdministrador = null;
+		ObjectOutputStream oosAdministrador = null;
 		try {
-			fosRestaurante = new FileOutputStream(arquivoAdm);
-			oosRestaurante = new ObjectOutputStream(fosRestaurante);
-			for (Administrador adm : this.listaAdm)
-				oosRestaurante.writeObject(adm);
+			fosAdministrador = new FileOutputStream(arquivoAdm);
+			oosAdministrador = new ObjectOutputStream(fosAdministrador);
+			oosAdministrador.writeObject(listaAdm);
+			oosAdministrador.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RepositorioException("Erro na gravação do arquivo "
 					+ this.ARQUIVO + ".");
 		} finally {
 			try {
-				fosRestaurante.close();
-				oosRestaurante.close();
+				oosAdministrador.close();
+				fosAdministrador.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RepositorioException("Erro no fechamento do arquivo "
@@ -150,8 +152,7 @@ public class RepositorioAdministradorArray implements
 			if (this.listaAdm.get(i).getCpf().equals(cpf)) {
 				indice = i;
 			}
-			// tratar um exceção do tipo se a conta não foi encontrada
 		}
-		return indice; // Retorna -1 se não encontrou
+		return indice;
 	}
 }

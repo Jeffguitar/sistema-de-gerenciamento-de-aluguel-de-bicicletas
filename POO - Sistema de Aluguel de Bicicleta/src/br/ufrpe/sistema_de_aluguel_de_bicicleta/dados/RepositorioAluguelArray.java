@@ -43,8 +43,11 @@ public class RepositorioAluguelArray implements IRepositorioAluguelArray {
 			oisAluguel = new ObjectInputStream(fisAluguel);
 			while (true) {
 				try {
-					Aluguel aluguel = (Aluguel) oisAluguel.readObject();
-					this.cadastrarAluguel(aluguel);
+					@SuppressWarnings("unchecked")
+					ArrayList<Aluguel> aluguel = (ArrayList<Aluguel>) oisAluguel
+							.readObject();
+					for (Aluguel a : aluguel)
+						this.cadastrarAluguel(a);
 				} catch (EOFException e) {
 					break;
 				}
@@ -71,21 +74,21 @@ public class RepositorioAluguelArray implements IRepositorioAluguelArray {
 	}
 
 	private void gravarArquivo() throws RepositorioException {
-		FileOutputStream fosRestaurante = null;
-		ObjectOutputStream oosRestaurante = null;
+		FileOutputStream fosAluguel = null;
+		ObjectOutputStream oosAluguel = null;
 		try {
-			fosRestaurante = new FileOutputStream(arquivoAluguel);
-			oosRestaurante = new ObjectOutputStream(fosRestaurante);
-			for (Aluguel aluguel : this.listaAluguel)
-				oosRestaurante.writeObject(aluguel);
+			fosAluguel = new FileOutputStream(arquivoAluguel);
+			oosAluguel = new ObjectOutputStream(fosAluguel);
+			oosAluguel.writeObject(listaAluguel);
+			oosAluguel.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RepositorioException("Erro na gravação do arquivo "
 					+ this.ARQUIVO + ".");
 		} finally {
 			try {
-				fosRestaurante.close();
-				oosRestaurante.close();
+				fosAluguel.close();
+				oosAluguel.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RepositorioException("Erro no fechamento do arquivo "
