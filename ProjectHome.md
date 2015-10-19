@@ -1,0 +1,1 @@
+Sistema para gerenciamento de aluguel de bicicleta tanto com funções para administrador quanto com funções para cliente. Possui funções básicas de cadastrar estações e bicicletas, cadastrar um usuário, listar utilizando filtros de busca e outras funcionalidades inerentes ao sistema.
